@@ -7,21 +7,7 @@ set(CMAKE_PREFIX_PATH "external/")
 
 find_package(SFML REQUIRED COMPONENTS graphics system window)
 
-add_executable(app 
-	"src/main.cpp"
-	"src/core/Application.cpp"
-	"src/ui/Button.cpp"
-	"src/ui/Label.cpp"
-	
-	"src/scenes/InitialScene.cpp"
-	"src/scenes/DotCountInputScene.cpp"
-	"src/scenes/DotInputScene.cpp"
-	"src/scenes/ResultScene.cpp"
-	"include/ui/InputField.h" 
-	"src/ui/InputField.cpp" 
-	"src/core/SceneManager.cpp"
- "include/core/ISceneSwitcher.h"  "include/utils/Logger.h" 
-"src/utils/Logger.cpp" "src/utils/Log.cpp" "include/utils/Log.h"   "src/scenes/TestsScene.cpp" "include/ui/UI.h" "include/algo/Triangulators.h" "include/algo/Geometry.h" "src/algo/Triangulators.cpp" "src/algo/Geometry.cpp")
+add_executable(app "src/algo/Geometry.cpp")
 
 target_include_directories(app PRIVATE include)
 target_link_libraries(app PRIVATE sfml-graphics sfml-system sfml-window)
