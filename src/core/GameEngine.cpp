@@ -1,9 +1,10 @@
 #include "core/GameEngine.h"
-
+#include "utils/Log.h"
 
 GameEngine::GameEngine(int w, int h) :
 	window(sf::VideoMode(sf::VideoMode(w, h)), "PACMAN GAME")
 {
+	Log::debug("GameEngine was created");
 }
 
 
