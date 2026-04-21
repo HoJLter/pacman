@@ -1,0 +1,50 @@
+# ===== Сборка =====
+build/
+out/
+*.o
+*.obj
+*.so
+*.exe
+*.out
+*.app
+
+# ===== CMake =====
+CMakeFiles/
+CMakeCache.txt
+cmake-build-*/
+Makefile
+compile_commands.json
+
+# ===== Логи =====
+*.log
+
+# ===== Временные файлы =====
+*.tmp
+*.temp
+*.swp
+*.swo
+*~
+
+# ===== IDE =====
+
+## VS Code
+.vscode/
+
+## CLion / IntelliJ
+.idea/
+
+## Visual Studio
+.vs/
+*.vcxproj*
+*.sln
+*.user
+
+# ===== macOS =====
+.DS_Store
+
+# ===== Linux =====
+*.dSYM/
+
+# ===== Тесты (если генерируются бинарники) =====
+test
+tests/*.exe
