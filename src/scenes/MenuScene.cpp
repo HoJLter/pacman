@@ -15,8 +15,8 @@ MenuScene::MenuScene(sf::Vector2u windowSize, ISceneSwitcher& ss):
 }
 
 
-void MenuScene::handleEvent(const sf::Event& event){
-	startButton.handleEvent(event);
+void MenuScene::handleEvent(const sf::Event& event, sf::RenderWindow& window){
+	startButton.handleEvent(event, window);
 }
 
 

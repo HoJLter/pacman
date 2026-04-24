@@ -76,13 +76,6 @@ void GameEngine::render() {
 	bg.setPosition(0, 0);
 	window.draw(bg);
 
-	// рамка по краям мира
-	sf::RectangleShape border({ GAME_WIDTH, GAME_HEIGHT });
-	border.setFillColor(sf::Color::Transparent);
-	border.setOutlineColor(sf::Color::Red);
-	border.setOutlineThickness(5.f);
-	window.draw(border);
-
 	sceneManager.render();
 	
 	window.display();

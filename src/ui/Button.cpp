@@ -52,13 +52,13 @@ void Button::update(sf::RenderWindow& window) {
 	};
 }
 
-void Button::handleEvent(const sf::Event& event) {
+void Button::handleEvent(const sf::Event& event, sf::RenderWindow& window) {
 	if (event.type == sf::Event::MouseButtonPressed &&
 		event.mouseButton.button == sf::Mouse::Left) {
-		sf::Vector2f mousePos = { 
-			static_cast<float>(event.mouseButton.x), 
-			static_cast<float>(event.mouseButton.y) 
-		};
+		sf::Vector2f mousePos = window.mapPixelToCoords(
+			{event.mouseButton.x,
+			event.mouseButton.y});
+
 		if (shape.getGlobalBounds().contains(mousePos)) {
 			Log::debug("Mouse click coords: " +
 				std::to_string(event.mouseButton.x) + " " +
@@ -75,10 +75,10 @@ void Button::handleEvent(const sf::Event& event) {
 	}
 	else if (event.type == sf::Event::MouseButtonReleased &&
 		event.mouseButton.button == sf::Mouse::Left) {
-		sf::Vector2f mousePos = {
-			static_cast<float>(event.mouseButton.x),
-			static_cast<float>(event.mouseButton.y)
-		};
+		sf::Vector2f mousePos = window.mapPixelToCoords(
+			{ event.mouseButton.x,
+			event.mouseButton.y });
+
 		if (shape.getGlobalBounds().contains(mousePos)) {
 			callback();
 			isPressed = false;

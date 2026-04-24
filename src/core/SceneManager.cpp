@@ -37,7 +37,7 @@ void SceneManager::switchScene() {
 }
 
 void SceneManager::handleEvent(const sf::Event& event) {
-	curScene->handleEvent(event);
+	curScene->handleEvent(event, window);
 	switchScene();
 }
 

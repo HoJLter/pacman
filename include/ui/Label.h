@@ -1,8 +1,7 @@
 #pragma once
 #include "SFML/Graphics.hpp"
-#include "ui/UI.h"
 
-class Label : public UI {
+class Label{
 private:
 	sf::Text content;
 	sf::Vector2f coords;
@@ -16,5 +15,5 @@ public:
 
 	void switchVisibility();
 
-	void render(sf::RenderWindow& window) override;
+	void render(sf::RenderWindow& window);
 };

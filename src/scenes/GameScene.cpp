@@ -7,7 +7,7 @@ GameScene::GameScene(sf::Vector2u windowSize, ISceneSwitcher& ss) :
 }
 
 
-void GameScene::handleEvent(const sf::Event& event) {
+void GameScene::handleEvent(const sf::Event& event, sf::RenderWindow& window) {
 }
 
 
