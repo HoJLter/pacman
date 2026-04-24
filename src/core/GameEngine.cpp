@@ -41,7 +41,7 @@ void GameEngine::applyLetterbox() {
 
 GameEngine::GameEngine(int w, int h) :
 	window(sf::VideoMode(sf::VideoMode(w, h)), "PACMAN GAME"),
-	sceneManager(window)
+	sceneManager(window, assetsManager)
 {
 	view = sf::View(sf::FloatRect(0.f, 0.f, GAME_WIDTH, GAME_HEIGHT));
 	applyLetterbox();

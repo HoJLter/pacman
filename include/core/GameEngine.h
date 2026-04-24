@@ -1,6 +1,7 @@
 #pragma once
 #include "SFML/Graphics.hpp"
-#include "SceneManager.h"
+#include "core/SceneManager.h"
+#include "core/AssetsManager.h"
 
 
 class GameEngine {
@@ -9,6 +10,7 @@ private:
 	sf::View view;
 
 	SceneManager sceneManager;
+	AssetsManager assetsManager;
 
 	void GameEngine::applyLetterbox();
 

@@ -2,6 +2,7 @@
 #include <iostream>
 #include "Scenes.h"
 #include "core/ISceneSwitcher.h"
+#include "core/AssetsManager.h"
 #include <memory>
 #include <optional>
 
@@ -12,8 +13,10 @@ private:
 	sf::RenderWindow& window;
 	std::unique_ptr<Scene> curScene;
 	std::optional<SceneID> requestedScene;
+	AssetsManager& assetsManager;
+
 public:
-	SceneManager(sf::RenderWindow& window);
+	SceneManager(sf::RenderWindow& window, AssetsManager& am);
 
 	void requestSwitchScene(SceneID id) override;
 	void switchScene();

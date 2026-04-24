@@ -10,8 +10,10 @@ std::string sceneIdToStr(SceneID id) {
 	}
 }
 
-SceneManager::SceneManager(sf::RenderWindow& window): window(window) {
-	curScene = std::make_unique<MenuScene>(window.getSize(), *this);
+SceneManager::SceneManager(sf::RenderWindow& window, AssetsManager& am): 
+	window(window),
+	assetsManager(am){
+	curScene = std::make_unique<MenuScene>(window.getSize(), *this, assetsManager);
 }
 
 void SceneManager::requestSwitchScene(SceneID id) {
@@ -23,11 +25,11 @@ void SceneManager::switchScene() {
 	if (requestedScene.has_value()) {
 		switch (requestedScene.value()) {
 		case SceneID::Menu: {
-			curScene = std::make_unique<MenuScene>(window.getSize(), *this);
+			curScene = std::make_unique<MenuScene>(window.getSize(), *this, assetsManager);
 			break;
 		}
 		case SceneID::Game: {
-			curScene = std::make_unique<GameScene>(window.getSize(), *this);
+			curScene = std::make_unique<GameScene>(window.getSize(), *this, assetsManager);
 			break;
 		}
 		}

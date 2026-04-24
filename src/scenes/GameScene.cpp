@@ -1,8 +1,8 @@
 #include "scenes/GameScene.h"
 
 
-GameScene::GameScene(sf::Vector2u windowSize, ISceneSwitcher& ss) :
-	Scene(ss)
+GameScene::GameScene(sf::Vector2u windowSize, ISceneSwitcher& ss, AssetsManager& am) :
+	Scene(ss, am)
 {
 }
 

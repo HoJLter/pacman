@@ -1,8 +1,8 @@
 #include "scenes/MenuScene.h"
 
 
-MenuScene::MenuScene(sf::Vector2u windowSize, ISceneSwitcher& ss):
-	Scene(ss),
+MenuScene::MenuScene(sf::Vector2u windowSize, ISceneSwitcher& ss, AssetsManager& am):
+	Scene(ss, am),
 	startButton(
 		{20.f, 20.f},
 		{300.f, 300.f},
