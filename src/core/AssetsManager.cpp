@@ -25,15 +25,15 @@ void AssetsManager::addTexture(std::string name, std::string path) {
 }
 
 AssetsManager::AssetsManager() {
-	addFont("pixel", "fonts/pixel-font.otf");
+	addFont("pixel", "assets/fonts/pixel-font.otf");
 
-	addTexture("bonuses", "bunuses.png");
-	addTexture("borderExt", "borderExt.png");
-	addTexture("mazeExt", "mazeExt.png");
-	addTexture("mazeInt", "mazeInt.png");
-	addTexture("ghosts", "ghosts.png");
-	addTexture("pacmanMove", "pacmanMove.png");
-	addTexture("pacmanDie", "pacmanDie.png");
+	addTexture("bonuses", "assets/game/bonuses.png");
+	addTexture("borderExt", "assets/game/borderExt.png");
+	addTexture("mazeExt", "assets/game/mazeExt.png");
+	addTexture("mazeInt", "assets/game/mazeInt.png");
+	addTexture("ghosts", "assets/game/ghosts.png");
+	addTexture("pacmanMove", "assets/game/pacmanMove.png");
+	addTexture("pacmanDie", "assets/game/pacmanDie.png");
 }
 
 const sf::Font& AssetsManager::getFont(const std::string& fontName) {
