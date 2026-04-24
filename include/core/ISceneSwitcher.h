@@ -3,11 +3,8 @@
 #include <SFML/Graphics.hpp>
 
 enum class SceneID {
-	Initial,
-	DotCountInput,
-	DotInput,
-	Result,
-	Tests
+	Menu,
+	Game
 };
 
 struct SharedData {
