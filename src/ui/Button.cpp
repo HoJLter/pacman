@@ -10,7 +10,7 @@ Button::Button(sf::Vector2f padding, sf::Vector2f coords, std::string text, std:
 	isPressed = false;
 
 	label.setString(text);
-	if (!font.loadFromFile("assets/pixel-font.otf")) {
+	if (!font.loadFromFile("assets/fonts/pixel-font.otf")) {
 		Log::error("Font loading was failed");
 		throw std::runtime_error("Font loading was failed");
 	}
@@ -31,10 +31,8 @@ Button::Button(sf::Vector2f padding, sf::Vector2f coords, std::string text, std:
 
 void Button::update(sf::RenderWindow& window) {
 	sf::Vector2i curPosInt = sf::Mouse::getPosition(window);
-	sf::Vector2f curPosFloat(
-		static_cast<float>(curPosInt.x),
-		static_cast<float>(curPosInt.y)
-	);
+	sf::Vector2f curPosFloat = window.mapPixelToCoords(curPosInt);
+
 	bool isHovered = shape.getGlobalBounds().contains(curPosFloat);
 	sf::Vector2f scale = shape.getScale();
 	if (isHovered) {

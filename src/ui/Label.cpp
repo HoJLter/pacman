@@ -3,7 +3,7 @@
 
 
 Label::Label(std::string str, sf::Vector2f coords, uint16_t charSize) {
-	if (!font.loadFromFile("assets/pixel-font.otf")) {
+	if (!font.loadFromFile("assets/fonts/pixel-font.otf")) {
 		Log::error("Font loading was failed");
 		throw std::runtime_error("Font loading was failed");
 	}
