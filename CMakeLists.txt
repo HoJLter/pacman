@@ -7,7 +7,7 @@ set(CMAKE_PREFIX_PATH "external/")
 
 find_package(SFML REQUIRED COMPONENTS graphics system window)
 
-add_executable(app "src/app.cpp" "src/utils/Log.cpp" "src/utils/Logger.cpp" "src/core/GameEngine.cpp")
+add_executable(app "src/app.cpp" "src/utils/Log.cpp" "src/utils/Logger.cpp" "src/core/GameEngine.cpp"     "include/scenes/Scene.h"  "include/Scenes.h" "include/core/ISceneSwitcher.h" "include/core/SceneManager.h")
 
 target_include_directories(app PRIVATE include)
 target_link_libraries(app PRIVATE sfml-graphics sfml-system sfml-window)
