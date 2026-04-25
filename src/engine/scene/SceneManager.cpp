@@ -1,5 +1,5 @@
 #include <memory>
-#include "core/SceneManager.h"
+#include "engine/scene/SceneManager.h"
 #include "utils/Log.h"
 
 std::string sceneIdToStr(SceneID id) {

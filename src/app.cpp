@@ -1,5 +1,5 @@
 #include "utils/Log.h"
-#include "core/GameEngine.h"
+#include "engine/core/GameEngine.h"
 
 int main() {
 	Log::setLogger(LoggerType::Console);

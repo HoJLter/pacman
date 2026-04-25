@@ -1,7 +1,7 @@
 #pragma once
 #include "SFML/Graphics.hpp"
-#include "core/ISceneSwitcher.h"
-#include "core/AssetsManager.h"
+#include "engine/scene/ISceneSwitcher.h"
+#include "engine/assets/AssetsManager.h"
 
 class Scene {
 public:

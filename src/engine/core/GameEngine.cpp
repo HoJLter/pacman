@@ -1,7 +1,7 @@
-#include "core/GameEngine.h"
+#include "engine/core/GameEngine.h"
 #include "utils/Log.h"
-#define GAME_WIDTH 1280.f
-#define GAME_HEIGHT 720.f
+#define GAME_WIDTH 1920.f
+#define GAME_HEIGHT 1080.f
 
 
 void GameEngine::applyLetterbox() {
@@ -43,7 +43,10 @@ GameEngine::GameEngine(int w, int h) :
 	window(sf::VideoMode(sf::VideoMode(w, h)), "PACMAN GAME"),
 	sceneManager(window, assetsManager)
 {
-	view = sf::View(sf::FloatRect(0.f, 0.f, GAME_WIDTH, GAME_HEIGHT));
+	settings.viewWidth = 1920.f;
+	settings.viewHeight = 1080.f;
+
+	view = sf::View(sf::FloatRect(0.f, 0.f, settings.viewWidth, settings.viewHeight));
 	applyLetterbox();
 	Log::debug("GameEngine was created");
 }

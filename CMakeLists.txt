@@ -7,7 +7,12 @@ set(CMAKE_PREFIX_PATH "external/")
 
 find_package(SFML REQUIRED COMPONENTS graphics system window)
 
-add_executable(app "src/app.cpp" "src/utils/Log.cpp" "src/utils/Logger.cpp" "src/core/GameEngine.cpp"     "include/scenes/Scene.h"  "include/Scenes.h" "include/core/ISceneSwitcher.h" "include/core/SceneManager.h" "include/scenes/MenuScene.h" "include/scenes/GameScene.h" "src/core/SceneManager.cpp" "src/ui/Button.cpp" "src/ui/Label.cpp" "include/ui/Button.h" "include/ui/Label.h"  "src/scenes/MenuScene.cpp" "src/scenes/GameScene.cpp" "include/core/AssetsManager.h" "src/core/AssetsManager.cpp")
+file(GLOB_RECURSE SOURCES
+    src/*.cpp
+    include/*.h
+)
+
+add_executable(app ${SOURCES})
 
 target_include_directories(app PRIVATE include)
 target_link_libraries(app PRIVATE sfml-graphics sfml-system sfml-window)
