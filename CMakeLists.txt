@@ -12,7 +12,7 @@ file(GLOB_RECURSE SOURCES
     include/*.h
 )
 
-add_executable(app ${SOURCES} "include/scenes/GameScene.h" "include/engine/core/EngineEvents.h" "src/scenes/GameScene.cpp")
+add_executable(app ${SOURCES} "include/scenes/GameScene.h" "include/engine/core/EngineEvents.h" "src/scenes/GameScene.cpp" "include/engine/assets/Animation.h" "src/engine/assets/Animation.cpp")
 
 target_include_directories(app PRIVATE include)
 target_link_libraries(app PRIVATE sfml-graphics sfml-system sfml-window sfml-audio)
