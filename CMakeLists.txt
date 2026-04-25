@@ -5,7 +5,7 @@ project (cpp-course)
 
 set(CMAKE_PREFIX_PATH "external/")
 
-find_package(SFML REQUIRED COMPONENTS graphics system window)
+find_package(SFML REQUIRED COMPONENTS graphics system window audio)
 
 file(GLOB_RECURSE SOURCES
     src/*.cpp
@@ -15,7 +15,7 @@ file(GLOB_RECURSE SOURCES
 add_executable(app ${SOURCES})
 
 target_include_directories(app PRIVATE include)
-target_link_libraries(app PRIVATE sfml-graphics sfml-system sfml-window)
+target_link_libraries(app PRIVATE sfml-graphics sfml-system sfml-window sfml-audio)
 
 add_custom_command(TARGET app POST_BUILD
 	COMMAND ${CMAKE_COMMAND} -E copy_directory

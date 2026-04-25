@@ -4,12 +4,23 @@
 MenuScene::MenuScene(GameContext& context, ISceneSwitcher& ss):
 	Scene(context, ss),
 	startButton(
-		{20.f, 20.f},
-		{500.f, 150.f},
+		{200.f, 20.f},
+		{context.settings.viewWidth/2.f, 
+		context.settings.viewHeight-200.f},
 		"LET'S GO!",
 		[this]() {
-			this->sceneSwitcher.requestSwitchScene(SceneID::Game);
-		})
+			//this->sceneSwitcher.requestSwitchScene(SceneID::Game);
+			this->context.assetsManager.playSound("start");
+		},
+		context.assetsManager),
+	pacmanLabel(
+		"PACMAN",
+		{ context.settings.viewWidth / 2.f,
+		context.settings.viewHeight / 2 - 300.f },
+		100,
+		sf::Color::Yellow,
+		context.assetsManager
+	)
 {
 	Log::debug(std::to_string(context.settings.viewWidth));
 }
@@ -25,7 +36,7 @@ void MenuScene::update() {
 
 }
 
-
 void MenuScene::render() {
+	pacmanLabel.render(context.window);
 	startButton.render(context.window);
 }

@@ -1,5 +1,6 @@
 #pragma once
 #include "SFML/Graphics.hpp"
+#include "engine/assets/AssetsManager.h"
 
 class Label{
 private:
@@ -10,7 +11,11 @@ private:
 	bool isVisible;
 
 public:
-	Label(std::string str, sf::Vector2f coords, uint16_t charSize);
+	Label(std::string str, 
+		sf::Vector2f coords, 
+		uint16_t charSize, 
+		sf::Color color, 
+		AssetsManager& assetsManager);
 	void setString(const std::string& str);
 
 	void switchVisibility();

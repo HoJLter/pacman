@@ -30,6 +30,7 @@ void GameEngine::handleEvent() {
 	}
 }
 void GameEngine::update() {
+	assetsManager.cleanupSounds();
 	sceneManager.update();
 
 }

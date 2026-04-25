@@ -3,17 +3,15 @@
 #include "ui/Button.h"
 #include "utils/Log.h"
 
-Button::Button(sf::Vector2f padding, sf::Vector2f coords, std::string text, std::function<void()> callback) {
+Button::Button(sf::Vector2f padding, sf::Vector2f coords, std::string text, std::function<void()> callback, AssetsManager& assets) {
 	this->callback = callback;
 	
 	//LABEL
 	isPressed = false;
 
 	label.setString(text);
-	if (!font.loadFromFile("assets/fonts/pixel-font.otf")) {
-		Log::error("Font loading was failed");
-		throw std::runtime_error("Font loading was failed");
-	}
+	
+	font = assets.getFont("pixel");
 	label.setFont(font);
 	label.setColor(sf::Color::Red);
 	sf::FloatRect labelBounds = label.getGlobalBounds();

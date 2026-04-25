@@ -1,11 +1,14 @@
 #pragma once
 #include "scenes/Scene.h"
 #include "ui/Button.h"
-
+#include "ui/Label.h"
+#include <vector>
 
 class MenuScene : public Scene {
 private:
 	Button startButton;
+
+	Label pacmanLabel;
 public:
 	MenuScene(GameContext& context, ISceneSwitcher& ss);
 	void handleEvent(const sf::Event& event) override;
