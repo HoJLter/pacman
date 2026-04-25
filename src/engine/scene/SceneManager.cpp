@@ -44,8 +44,8 @@ void SceneManager::handleEvent(const sf::Event& event) {
 	switchScene();
 }
 
-void SceneManager::update() {
-	curScene->update();
+void SceneManager::update(float dt) {
+	curScene->update(dt);
 	switchScene();
 }
 

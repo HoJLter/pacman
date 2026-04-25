@@ -36,7 +36,9 @@ void GameEngine::handleEvent() {
 }
 void GameEngine::update() {
 	assetsManager.cleanupSounds();
-	sceneManager.update();
+	float dt = frameClock.restart().asSeconds();
+	dt = std::min(dt, 0.1f);
+	sceneManager.update(dt);
 }
 void GameEngine::render() {
 	window.clear(sf::Color::Black);

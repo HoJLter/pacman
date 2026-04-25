@@ -16,6 +16,8 @@ private:
 	GameContext context;
 	SceneManager sceneManager;
 
+	sf::Clock frameClock;
+
 	void applyLetterbox();
 	void updateView();
 

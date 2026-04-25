@@ -23,6 +23,6 @@ public:
 	void switchScene();
 
 	void handleEvent(const sf::Event& event);
-	void update();
+	void update(float dt);
 	void render();
 };

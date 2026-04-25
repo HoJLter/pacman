@@ -30,7 +30,7 @@ void MenuScene::handleEvent(const sf::Event& event){
 }
 
 
-void MenuScene::update() {
+void MenuScene::update(float dt) {
 	startButton.update(context.window);
 
 }

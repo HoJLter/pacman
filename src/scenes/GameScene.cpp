@@ -13,7 +13,7 @@ void GameScene::handleEvent(const sf::Event& event) {
 }
 
 
-void GameScene::update() {
+void GameScene::update(float dt) {
 
 }
 

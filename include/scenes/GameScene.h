@@ -7,6 +7,6 @@ private:
 public:
 	GameScene(GameContext& context, ISceneSwitcher& ss);
 	void handleEvent(const sf::Event& event) override;
-	void update() override;
+	void update(float dt) override;
 	void render() override;
 };
