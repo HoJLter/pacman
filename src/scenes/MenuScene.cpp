@@ -1,31 +1,31 @@
 #include "scenes/MenuScene.h"
+#include "utils/Log.h"
 
-
-MenuScene::MenuScene(sf::Vector2u windowSize, ISceneSwitcher& ss, AssetsManager& am):
-	Scene(ss, am),
+MenuScene::MenuScene(GameContext& context, ISceneSwitcher& ss):
+	Scene(context, ss),
 	startButton(
 		{20.f, 20.f},
-		{windowSize.x/2.f, 150.f},
+		{500.f, 150.f},
 		"LET'S GO!",
 		[this]() {
 			this->sceneSwitcher.requestSwitchScene(SceneID::Game);
 		})
 {
+	Log::debug(std::to_string(context.settings.viewWidth));
+}
+
+
+void MenuScene::handleEvent(const sf::Event& event){
+	startButton.handleEvent(event, context.window);
+}
+
+
+void MenuScene::update() {
+	startButton.update(context.window);
 
 }
 
 
-void MenuScene::handleEvent(const sf::Event& event, sf::RenderWindow& window){
-	startButton.handleEvent(event, window);
-}
-
-
-void MenuScene::update(sf::RenderWindow& window) {
-	startButton.update(window);
-
-}
-
-
-void MenuScene::render(sf::RenderWindow& window) {
-	startButton.render(window);
+void MenuScene::render() {
+	startButton.render(context.window);
 }

@@ -3,7 +3,7 @@
 #include "engine/scene/SceneManager.h"
 #include "engine/assets/AssetsManager.h"
 #include "engine/core/GameSettings.h"
-
+#include "engine/GameContext.h"
 
 
 class GameEngine {
@@ -12,8 +12,9 @@ private:
 	sf::View view;
 
 	GameSettings settings;
-	SceneManager sceneManager;
 	AssetsManager assetsManager;
+	GameContext context;
+	SceneManager sceneManager;
 
 	void GameEngine::applyLetterbox();
 

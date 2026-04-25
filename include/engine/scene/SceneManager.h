@@ -10,15 +10,14 @@ std::string sceneIdToStr(SceneID id);
 
 class SceneManager: public ISceneSwitcher {
 private:
-	sf::RenderWindow& window;
 	std::unique_ptr<Scene> curScene;
 	std::optional<SceneID> requestedScene;
 
-	AssetsManager& assetsManager;
+	GameContext& context;
 	
 
 public:
-	SceneManager(sf::RenderWindow& window, AssetsManager& am);
+	SceneManager(GameContext& context);
 
 	void requestSwitchScene(SceneID id) override;
 	void switchScene();

@@ -1,5 +1,6 @@
 #include <memory>
 #include "engine/scene/SceneManager.h"
+#include "engine/GameContext.h"
 #include "utils/Log.h"
 
 std::string sceneIdToStr(SceneID id) {
@@ -10,10 +11,10 @@ std::string sceneIdToStr(SceneID id) {
 	}
 }
 
-SceneManager::SceneManager(sf::RenderWindow& window, AssetsManager& am): 
-	window(window),
-	assetsManager(am){
-	curScene = std::make_unique<MenuScene>(window.getSize(), *this, assetsManager);
+SceneManager::SceneManager(GameContext& context): 
+	context(context)
+{
+	curScene = std::make_unique<MenuScene>(context, *this);
 }
 
 void SceneManager::requestSwitchScene(SceneID id) {
@@ -25,11 +26,11 @@ void SceneManager::switchScene() {
 	if (requestedScene.has_value()) {
 		switch (requestedScene.value()) {
 		case SceneID::Menu: {
-			curScene = std::make_unique<MenuScene>(window.getSize(), *this, assetsManager);
+			curScene = std::make_unique<MenuScene>(context, *this);
 			break;
 		}
 		case SceneID::Game: {
-			curScene = std::make_unique<GameScene>(window.getSize(), *this, assetsManager);
+			curScene = std::make_unique<MenuScene>(context, *this);
 			break;
 		}
 		}
@@ -39,15 +40,15 @@ void SceneManager::switchScene() {
 }
 
 void SceneManager::handleEvent(const sf::Event& event) {
-	curScene->handleEvent(event, window);
+	curScene->handleEvent(event);
 	switchScene();
 }
 
 void SceneManager::update() {
-	curScene->update(window);
+	curScene->update();
 	switchScene();
 }
 
 void SceneManager::render() {
-	curScene->render(window);
+	curScene->render();
 }
