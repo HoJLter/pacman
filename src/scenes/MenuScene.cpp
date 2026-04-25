@@ -9,8 +9,7 @@ MenuScene::MenuScene(GameContext& context, ISceneSwitcher& ss):
 		context.settings.viewHeight-200.f},
 		"LET'S GO!",
 		[this]() {
-			//this->sceneSwitcher.requestSwitchScene(SceneID::Game);
-			this->context.assetsManager.playSound("start");
+			this->sceneSwitcher.requestSwitchScene(SceneID::Game);
 		},
 		context.assetsManager),
 	pacmanLabel(

@@ -16,7 +16,8 @@ private:
 	GameContext context;
 	SceneManager sceneManager;
 
-	void GameEngine::applyLetterbox();
+	void applyLetterbox();
+	void updateView();
 
 	void render();
 	void update();

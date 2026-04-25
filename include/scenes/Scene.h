@@ -7,7 +7,7 @@ class Scene {
 public:
 	GameContext& context;
 	ISceneSwitcher& sceneSwitcher;
-	
+
 	Scene(GameContext& context, ISceneSwitcher& ss) : 
 		context(context),
 		sceneSwitcher(ss){};

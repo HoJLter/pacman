@@ -30,7 +30,7 @@ void SceneManager::switchScene() {
 			break;
 		}
 		case SceneID::Game: {
-			curScene = std::make_unique<MenuScene>(context, *this);
+			curScene = std::make_unique<GameScene>(context, *this);
 			break;
 		}
 		}

@@ -2,6 +2,8 @@
 #include "utils/Log.h"
 
 
+
+
 GameEngine::GameEngine(int w, int h) :
 	window(sf::VideoMode(sf::VideoMode(w, h)), "PACMAN GAME"),
 	settings{1920.f, 1080.f},
@@ -35,7 +37,6 @@ void GameEngine::handleEvent() {
 void GameEngine::update() {
 	assetsManager.cleanupSounds();
 	sceneManager.update();
-
 }
 void GameEngine::render() {
 	window.clear(sf::Color::Black);
@@ -93,4 +94,10 @@ void GameEngine::applyLetterbox() {
 	));
 
 	window.setView(view);
+}
+
+void GameEngine::updateView() {
+	view.setSize(settings.viewWidth, settings.viewHeight);
+	view.setCenter(settings.viewWidth / 2.f, settings.viewHeight / 2.f);
+	applyLetterbox();
 }
