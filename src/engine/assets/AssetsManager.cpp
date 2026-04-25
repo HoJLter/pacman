@@ -46,6 +46,7 @@ AssetsManager::AssetsManager() {
 	addTexture("ghosts", "assets/game/ghosts.png");
 	addTexture("pacmanMove", "assets/game/pacmanMove.png");
 	addTexture("pacmanDie", "assets/game/pacmanDie.png");
+	addTexture("icon", "assets/game/icon.png");
 
 	addSound("start", "assets/sounds/startSound.mp3");
 }

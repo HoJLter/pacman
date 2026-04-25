@@ -10,6 +10,9 @@ GameEngine::GameEngine(int w, int h) :
 	sceneManager(context)
 {
 	view = sf::View(sf::FloatRect(0.f, 0.f, settings.viewWidth, settings.viewHeight));
+	sf::Texture iconTexture = assetsManager.getTexture("icon");
+	sf::Image icon = iconTexture.copyToImage();
+	window.setIcon(icon.getSize().x, icon.getSize().y, icon.getPixelsPtr());
 	applyLetterbox();
 	Log::debug("GameEngine was created");
 }
