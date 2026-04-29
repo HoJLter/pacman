@@ -1,5 +1,8 @@
 #include "engine/assets/AssetsManager.h"
 #include "utils/Log.h"
+#include <sstream>
+#include <iomanip>
+
 
 
 void AssetsManager::addFont(std::string name, std::string path) {
@@ -43,12 +46,19 @@ AssetsManager::AssetsManager() {
 	addTexture("borderExt", "assets/game/borderExt.png");
 	addTexture("mazeExt", "assets/game/mazeExt.png");
 	addTexture("mazeInt", "assets/game/mazeInt.png");
-	addTexture("ghosts", "assets/game/ghosts.png");
+	addTexture("blinky", "assets/game/ghosts/blinky.png");
+	addTexture("pinky", "assets/game/ghosts/pinky.png");
+	addTexture("inky", "assets/game/ghosts/inky.png");
+	addTexture("clyde", "assets/game/ghosts/clyde.png");
 	addTexture("pacmanMove", "assets/game/pacmanMove.png");
 	addTexture("pacmanDie", "assets/game/pacmanDie.png");
 	addTexture("icon", "assets/game/icon.png");
+	addTexture("tilemap", "assets/game/tileMap.png");
 
 	addSound("start", "assets/sounds/startSound.mp3");
+
+	calcTilemap();
+	logTilemap();
 }
 
 const sf::Font& AssetsManager::getFont(const std::string& fontName) {
@@ -86,4 +96,83 @@ void AssetsManager::cleanupSounds() {
 			++it;
 		}
 	}
+}
+
+
+void AssetsManager::logTilemap() {
+	for (const auto& row : tilemap) {
+		std::stringstream ss;
+
+		for (int val : row) {
+			ss << std::setw(2) << val; // ширина ячейки
+		}
+
+		Log::debug(ss.str());
+	}
+}
+
+void AssetsManager::calcTilemap() {
+	Log::debug("Tilemap calculation has been started");
+
+	sf::Texture tilemapTexture = getTexture("tilemap");
+	sf::Image tilemapImage = tilemapTexture.copyToImage();
+	
+	int mapWidth = tilemapImage.getSize().x;
+	int mapHeight = tilemapImage.getSize().y;
+
+	tilemap.resize(mapWidth, std::vector<int>(mapHeight, 0));
+
+
+	sf::Color moneyColor = sf::Color(223, 113, 38);
+	sf::Color borderColor = sf::Color(240, 33, 52);
+	sf::Color wallColor = sf::Color(33, 33, 240);
+	sf::Color teleportColor = sf::Color(33, 240, 64);
+
+	sf::Color blinkySpawnColor = sf::Color(165, 0, 0);
+	sf::Color pinkySpawnColor = sf::Color(240, 33, 255);
+	sf::Color inkySpawnColor = sf::Color(33, 211, 255);
+	sf::Color clydeSpawnColor = sf::Color(255, 122, 33);
+
+	sf::Color pacmanSpawnColor = sf::Color(255, 204, 0);
+
+	for (int x = 0; x < mapWidth; x++) {
+		for (int y = 0; y < mapHeight; y++) {
+			sf::Color pixelColor = tilemapImage.getPixel(x, y);
+			if (pixelColor == moneyColor) {
+				tilemap[x][y] = tile::Money;
+			}
+			else if (pixelColor == borderColor) {
+				tilemap[x][y] = tile::Border;
+			}
+			else if (pixelColor == wallColor) {
+				tilemap[x][y] = tile::Wall;
+			}
+			else if (pixelColor == teleportColor) {
+				tilemap[x][y] = tile::Teleport;
+			}
+			else if (pixelColor == blinkySpawnColor) {
+				tilemap[x][y] = tile::BlinkySpawn;
+			}
+			else if (pixelColor == pinkySpawnColor) {
+				tilemap[x][y] = tile::PinkySpawn;
+			}
+			else if (pixelColor == inkySpawnColor) {
+				tilemap[x][y] = tile::InkySpawn;
+			}
+			else if (pixelColor == clydeSpawnColor) {
+				tilemap[x][y] = tile::ClydeSpawn;
+			}
+			else if (pixelColor == pacmanSpawnColor) {
+				tilemap[x][y] = tile::PacmanSpawn;
+			}
+			else {
+				tilemap[x][y] = -1;
+			}
+		}
+	}
+	Log::debug("Tilemap calculation has been ended");
+}
+
+std::vector<std::vector<int>>& AssetsManager::getTilemap() {
+	return tilemap;
 }

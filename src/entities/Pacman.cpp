@@ -12,14 +12,15 @@ Pacman::Pacman(GameContext& context) :
 		16,                // frameWidth
 		16,                // frameHeight
 		0,                 // row
-		0.2f			   // animation speed (in seconds)
+		0.1f			   // animation speed (in seconds)
 	)
 {
+	curDirection = MoveDirection::None;
 	Log::debug("Pacman has been created");
 	pacman.setTexture(pacmanMoveTexture);
 	pacman.setTextureRect(sf::IntRect({0, 0}, {16, 16}));
 	pacman.setPosition({context.settings.viewWidth/2.f, context.settings.viewHeight/2.f});
-	pacman.setScale({ 10.f, 10.f });
+	pacman.setScale({ 5.f, 5.f });
 }
 
 void Pacman::handleEvent(const sf::Event& event) {

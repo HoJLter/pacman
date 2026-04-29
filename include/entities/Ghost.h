@@ -5,23 +5,24 @@
 #include "entities/EntityData.h"
 
 
-class Pacman {
+class Ghost {
 private:
 	GameContext& context;
+	GhostType type;
 
-	sf::Texture pacmanMoveTexture;
-	Animation pacmanMove;
-
-	sf::Sprite pacman;
+	sf::Sprite ghost;
+	sf::Texture ghostMoveTexture;
 	MoveDirection curDirection;
-
+	Animation ghostMove;
 	sf::Clock animationClock;
+
 	float speedPerSec;
 
 public:
-	Pacman::Pacman(GameContext& context);
+	Ghost::Ghost(GameContext& context, GhostType type);
 
 	void handleEvent(const sf::Event& event);
 	void update(sf::RenderWindow& window, float dt);
 	void render(sf::RenderWindow& window);
 };
+

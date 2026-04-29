@@ -37,7 +37,7 @@ void GameEngine::handleEvent() {
 void GameEngine::update() {
 	assetsManager.cleanupSounds();
 	float dt = frameClock.restart().asSeconds();
-	dt = std::min(dt, 0.1f);
+	dt = std::min(dt, 0.2f);
 	sceneManager.update(dt);
 }
 void GameEngine::render() {
