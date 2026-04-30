@@ -1,13 +1,15 @@
 #include "scenes/GameScene.h"
 #include "utils/Log.h"
-
+	
 GameScene::GameScene(GameContext& context, ISceneSwitcher& ss) :
 	Scene(context, ss),
-	pacman(context),
-	blinky(context, GhostType::Blinky),
-	pinky(context, GhostType::Pinky),
-	inky(context, GhostType::Inky),
-	clyde(context, GhostType::Clyde)
+	scale(2.f),
+	maze(context, scale),
+	pacman(context, scale),
+	blinky(context, GhostType::Blinky, scale),
+	pinky(context, GhostType::Pinky, scale),
+	inky(context, GhostType::Inky, scale),
+	clyde(context, GhostType::Clyde, scale)
 
 {
 	context.assetsManager.playSound("start");
@@ -38,6 +40,7 @@ void GameScene::update(float dt) {
 
 void GameScene::render() {
 	pacman.render(context.window);
+	maze.render(context.window);
 
 	blinky.render(context.window);
 	pinky.render(context.window);

@@ -17,9 +17,9 @@ private:
 	sf::Clock animationClock;
 
 	float speedPerSec;
-
+	float scale;
 public:
-	Ghost::Ghost(GameContext& context, GhostType type);
+	Ghost::Ghost(GameContext& context, GhostType type, float scale);
 
 	void handleEvent(const sf::Event& event);
 	void update(sf::RenderWindow& window, float dt);

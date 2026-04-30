@@ -46,6 +46,7 @@ AssetsManager::AssetsManager() {
 	addTexture("borderExt", "assets/game/borderExt.png");
 	addTexture("mazeExt", "assets/game/mazeExt.png");
 	addTexture("mazeInt", "assets/game/mazeInt.png");
+	addTexture("money", "assets/game/money.png");
 	addTexture("blinky", "assets/game/ghosts/blinky.png");
 	addTexture("pinky", "assets/game/ghosts/pinky.png");
 	addTexture("inky", "assets/game/ghosts/inky.png");
@@ -54,7 +55,6 @@ AssetsManager::AssetsManager() {
 	addTexture("pacmanDie", "assets/game/pacmanDie.png");
 	addTexture("icon", "assets/game/icon.png");
 	addTexture("tilemap", "assets/game/tileMap.png");
-
 	addSound("start", "assets/sounds/startSound.mp3");
 
 	calcTilemap();

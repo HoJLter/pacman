@@ -2,8 +2,9 @@
 #include "utils/Log.h"
 
 
-Pacman::Pacman(GameContext& context) :
+Pacman::Pacman(GameContext& context, float scale) :
 	context(context),
+	scale(scale),
 	speedPerSec(200.f),
 	pacmanMoveTexture(context.assetsManager.getTexture("pacmanMove")),
 	pacmanMove(
@@ -20,7 +21,7 @@ Pacman::Pacman(GameContext& context) :
 	pacman.setTexture(pacmanMoveTexture);
 	pacman.setTextureRect(sf::IntRect({0, 0}, {16, 16}));
 	pacman.setPosition({context.settings.viewWidth/2.f, context.settings.viewHeight/2.f});
-	pacman.setScale({ 5.f, 5.f });
+	pacman.setScale({ scale, scale });
 }
 
 void Pacman::handleEvent(const sf::Event& event) {

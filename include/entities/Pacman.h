@@ -17,9 +17,10 @@ private:
 
 	sf::Clock animationClock;
 	float speedPerSec;
+	float scale;
 
 public:
-	Pacman::Pacman(GameContext& context);
+	Pacman::Pacman(GameContext& context, float scale);
 
 	void handleEvent(const sf::Event& event);
 	void update(sf::RenderWindow& window, float dt);
