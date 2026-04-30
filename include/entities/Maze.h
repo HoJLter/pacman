@@ -9,7 +9,7 @@ private:
 	std::vector<std::vector<sf::Sprite>> sprites;
 	std::vector<std::vector<int>>& tilemap;
 	float scale;
-	void calculateTile();
+	sf::IntRect calculateTile(int x, int y, tile tiletype);
 public:
 	Maze(GameContext& context, float scale);
 	void handleEvent(const sf::Event& event);
