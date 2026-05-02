@@ -5,7 +5,7 @@
 Pacman::Pacman(GameContext& context, float scale) :
 	context(context),
 	scale(scale),
-	speedPerSec(200.f),
+	speedPerSec(400.f),
 	pacmanMoveTexture(context.assetsManager.getTexture("pacmanMove")),
 	pacmanMove(
 		pacmanMoveTexture, // texture
@@ -98,11 +98,11 @@ void Pacman::update(sf::RenderWindow& window, float dt) {
 	sf::Vector2f p3 = { newPosition.x + inset, newPosition.y + size - inset };
 	sf::Vector2f p4 = { newPosition.x + size - inset, newPosition.y + size - inset };
 
-	sf::Vector2u t1 = calcSqrPos(p1);
-	sf::Vector2u t2 = calcSqrPos(p2);
-	sf::Vector2u t3 = calcSqrPos(p3);
-	sf::Vector2u t4 = calcSqrPos(p4);
-	sf::Vector2u center = calcSqrPos({ newPosition.x + size/ 2.f, newPosition.y + size/ 2.f });
+	sf::Vector2u t1 = posToSqr(p1);
+	sf::Vector2u t2 = posToSqr(p2);
+	sf::Vector2u t3 = posToSqr(p3);
+	sf::Vector2u t4 = posToSqr(p4);
+	sf::Vector2u center = posToSqr({ newPosition.x + size/ 2.f, newPosition.y + size/ 2.f });
 
 
 	auto isFree = [&](sf::Vector2u pos) {
@@ -123,6 +123,17 @@ void Pacman::update(sf::RenderWindow& window, float dt) {
 		return false;
 		};
 
+	sf::Vector2u tpPos;
+	auto isTeleport = [&](sf::Vector2u pos) {
+		if (pos.y < tilemap.size() &&
+			pos.x < tilemap[0].size() &&
+			tilemap[pos.y][pos.x] == tile::Teleport) {
+			tpPos = pos;
+			return true;
+		}
+		return false;
+		};
+
 
 	if (isFree(t1) && isFree(t2) && isFree(t3) && isFree(t4)) {
 		pacman.setPosition(newPosition);
@@ -133,11 +144,30 @@ void Pacman::update(sf::RenderWindow& window, float dt) {
 		Log::debug("Event CoinCollected has been pushed");
 	};
 
+	if (isTeleport(center)) {
+		sf::Vector2u rightTpPos = { 31, 9 };
+		sf::Vector2u leftTpPos = { 0, 9 };
+		if (tpPos.x == leftTpPos.x &&
+			tpPos.y == leftTpPos.y) {
+			Log::debug("Left teleport has been used");
+			pacman.setPosition({
+				static_cast<float>((rightTpPos.x-1) * 16 * scale + size / 2),
+				static_cast<float>(rightTpPos.y*16*scale + size/2)});
+		}
+		else if (tpPos.x == rightTpPos.x &&
+			tpPos.y == rightTpPos.y){
+			Log::debug("Right teleport has been used");
+			pacman.setPosition({ 
+				static_cast<float>((leftTpPos.x+2) * 16 * scale + size / 2),
+				static_cast<float>(leftTpPos.y*16*scale + size / 2)});
+		}
+	}
+
 	pacmanMove.update(dt);
 	pacmanMove.applyToSprite(pacman);
 }
 
-sf::Vector2u Pacman::calcSqrPos(sf::Vector2f pos) {
+sf::Vector2u Pacman::posToSqr(sf::Vector2f pos) {
 	int TS = 16;
 	sf::Vector2u sqrNum = {
 		static_cast<unsigned>(((pos.x - mapOffsetX)) / (16 * scale)),
@@ -146,6 +176,8 @@ sf::Vector2u Pacman::calcSqrPos(sf::Vector2f pos) {
 
 	return sqrNum;
 }
+
+
 
 void Pacman::render(sf::RenderWindow& window) {
 	window.draw(pacman);

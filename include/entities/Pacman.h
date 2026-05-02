@@ -23,7 +23,7 @@ private:
 	float mapOffsetY;
 
 	std::vector<std::vector<int>>& tilemap;
-	sf::Vector2u calcSqrPos(sf::Vector2f pos);
+	sf::Vector2u posToSqr(sf::Vector2f pos);
 public:
 	Pacman(GameContext& context, float scale);
 
