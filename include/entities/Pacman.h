@@ -19,9 +19,13 @@ private:
 	float speedPerSec;
 	float scale;
 
-	sf::Vector2u squareCoords;
+	float mapOffsetX;
+	float mapOffsetY;
+
+	std::vector<std::vector<int>>& tilemap;
+	sf::Vector2u calcSqrPos(sf::Vector2f pos);
 public:
-	Pacman::Pacman(GameContext& context, float scale);
+	Pacman(GameContext& context, float scale);
 
 	void handleEvent(const sf::Event& event);
 	void update(sf::RenderWindow& window, float dt);

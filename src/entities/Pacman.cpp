@@ -5,7 +5,7 @@
 Pacman::Pacman(GameContext& context, float scale) :
 	context(context),
 	scale(scale),
-	speedPerSec(200.f),
+	speedPerSec(100.f),
 	pacmanMoveTexture(context.assetsManager.getTexture("pacmanMove")),
 	pacmanMove(
 		pacmanMoveTexture, // texture
@@ -14,9 +14,26 @@ Pacman::Pacman(GameContext& context, float scale) :
 		16,                // frameHeight
 		0,                 // row
 		0.1f			   // animation speed (in seconds)
-	)
+	),
+	tilemap(context.assetsManager.getTilemap())
 {
 	curDirection = MoveDirection::None;
+
+	int TS = 16;
+	sf::Vector2f viewSize = context.window.getView().getSize();
+	int tilesY = context.assetsManager.getTilemap().size();
+	int tilesX = context.assetsManager.getTilemap()[0].size();
+	
+	sf::View view = context.window.getView();
+
+	sf::Vector2f viewCenter = view.getCenter();
+
+	float viewLeft = viewCenter.x - viewSize.x / 2.0f;
+	float viewTop = viewCenter.y - viewSize.y / 2.0f;
+
+	mapOffsetX = viewLeft + (viewSize.x - (tilesX * 16 * scale)) / 2.0f;
+	mapOffsetY = viewTop + (viewSize.y - (tilesY * 16 * scale)) / 2.0f;
+
 	Log::debug("Pacman has been created");
 	pacman.setTexture(pacmanMoveTexture);
 	pacman.setTextureRect(sf::IntRect({0, 0}, {16, 16}));
@@ -51,28 +68,66 @@ void Pacman::handleEvent(const sf::Event& event) {
 	}
 }
 void Pacman::update(sf::RenderWindow& window, float dt) {
-	switch (curDirection) {
-		case MoveDirection::Up: {
-			pacman.move({ 0.f, -speedPerSec*dt });
-			break;
-		}
-		case MoveDirection::Down: {
-			pacman.move({ 0.f, +speedPerSec*dt });
-			break;
-		}
-		case MoveDirection::Left: {
-			pacman.move({ -speedPerSec*dt, 0.f });
-			break;
-		}
-		case MoveDirection::Right: {
-			pacman.move({ +speedPerSec * dt, 0.f });
-			break;
-		}
+	sf::Vector2f curPosition = pacman.getPosition();
+	sf::Vector2f newPosition = curPosition;
 
+	switch (curDirection) {
+	case MoveDirection::Up:
+		newPosition.y -= speedPerSec * dt;
+		break;
+
+	case MoveDirection::Down:
+		newPosition.y += speedPerSec * dt;
+		break;
+
+	case MoveDirection::Left:
+		newPosition.x -= speedPerSec * dt;
+		break;
+
+	case MoveDirection::Right:
+		newPosition.x += speedPerSec * dt;
+		break;
 	}
+
+
+	float size = 16.0f * scale;
+	float inset = 3.f * scale; 
+
+	sf::Vector2f p1 = { newPosition.x + inset, newPosition.y + inset };
+	sf::Vector2f p2 = { newPosition.x + size - inset, newPosition.y + inset };
+	sf::Vector2f p3 = { newPosition.x + inset, newPosition.y + size - inset };
+	sf::Vector2f p4 = { newPosition.x + size - inset, newPosition.y + size - inset };
+
+	sf::Vector2u t1 = calcSqrPos(p1);
+	sf::Vector2u t2 = calcSqrPos(p2);
+	sf::Vector2u t3 = calcSqrPos(p3);
+	sf::Vector2u t4 = calcSqrPos(p4);
+
+	auto isFree = [&](sf::Vector2u pos) {
+		return pos.y < tilemap.size() &&
+			pos.x < tilemap[0].size() &&
+			tilemap[pos.y][pos.x] != tile::Wall &&
+			tilemap[pos.y][pos.x] != tile::Border;
+		};
+
+	if (isFree(t1) && isFree(t2) && isFree(t3) && isFree(t4)) {
+		pacman.setPosition(newPosition);
+	}
+
 	pacmanMove.update(dt);
 	pacmanMove.applyToSprite(pacman);
 }
+
+sf::Vector2u Pacman::calcSqrPos(sf::Vector2f pos) {
+	int TS = 16;
+	sf::Vector2u sqrNum = {
+		static_cast<unsigned>(((pos.x - mapOffsetX)) / (16 * scale)),
+		static_cast<unsigned>(((pos.y - mapOffsetY)) / (16 * scale))
+	};
+
+	return sqrNum;
+}
+
 void Pacman::render(sf::RenderWindow& window) {
 	window.draw(pacman);
 }
