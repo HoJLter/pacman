@@ -19,6 +19,7 @@ private:
 	float speedPerSec;
 	float scale;
 
+	sf::Vector2u squareCoords;
 public:
 	Pacman::Pacman(GameContext& context, float scale);
 

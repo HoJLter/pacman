@@ -42,10 +42,9 @@ void AssetsManager::addSound(std::string name, std::string path) {
 AssetsManager::AssetsManager() {
 	addFont("pixel", "assets/fonts/pixel-font.otf");
 
-	addTexture("bonuses", "assets/game/bonuses.png");
-	addTexture("borderExt", "assets/game/borderExt.png");
-	addTexture("mazeExt", "assets/game/mazeExt.png");
-	addTexture("mazeInt", "assets/game/mazeInt.png");
+	addTexture("bonuses", "assets/game/maze/bonuses.png");
+	addTexture("border", "assets/game/maze/border.png");
+	addTexture("maze", "assets/game/maze/maze.png");
 	addTexture("money", "assets/game/money.png");
 	addTexture("blinky", "assets/game/ghosts/blinky.png");
 	addTexture("pinky", "assets/game/ghosts/pinky.png");
@@ -54,7 +53,7 @@ AssetsManager::AssetsManager() {
 	addTexture("pacmanMove", "assets/game/pacmanMove.png");
 	addTexture("pacmanDie", "assets/game/pacmanDie.png");
 	addTexture("icon", "assets/game/icon.png");
-	addTexture("tilemap", "assets/game/tileMap.png");
+	addTexture("tilemap", "assets/game/tileMap1.png");
 	addSound("start", "assets/sounds/startSound.mp3");
 
 	calcTilemap();
@@ -116,12 +115,11 @@ void AssetsManager::calcTilemap() {
 
 	sf::Texture tilemapTexture = getTexture("tilemap");
 	sf::Image tilemapImage = tilemapTexture.copyToImage();
-	
+
 	int mapWidth = tilemapImage.getSize().x;
 	int mapHeight = tilemapImage.getSize().y;
 
-	tilemap.resize(mapWidth, std::vector<int>(mapHeight, 0));
-
+	tilemap.resize(mapHeight, std::vector<int>(mapWidth, 0));
 
 	sf::Color moneyColor = sf::Color(223, 113, 38);
 	sf::Color borderColor = sf::Color(240, 33, 52);
@@ -135,41 +133,43 @@ void AssetsManager::calcTilemap() {
 
 	sf::Color pacmanSpawnColor = sf::Color(255, 204, 0);
 
-	for (int x = 0; x < mapWidth; x++) {
-		for (int y = 0; y < mapHeight; y++) {
+	for (int y = 0; y < mapHeight; y++) {
+		for (int x = 0; x < mapWidth; x++) {
 			sf::Color pixelColor = tilemapImage.getPixel(x, y);
+
 			if (pixelColor == moneyColor) {
-				tilemap[x][y] = tile::Money;
+				tilemap[y][x] = tile::Money;
 			}
 			else if (pixelColor == borderColor) {
-				tilemap[x][y] = tile::Border;
+				tilemap[y][x] = tile::Border;
 			}
 			else if (pixelColor == wallColor) {
-				tilemap[x][y] = tile::Wall;
+				tilemap[y][x] = tile::Wall;
 			}
 			else if (pixelColor == teleportColor) {
-				tilemap[x][y] = tile::Teleport;
+				tilemap[y][x] = tile::Teleport;
 			}
 			else if (pixelColor == blinkySpawnColor) {
-				tilemap[x][y] = tile::BlinkySpawn;
+				tilemap[y][x] = tile::BlinkySpawn;
 			}
 			else if (pixelColor == pinkySpawnColor) {
-				tilemap[x][y] = tile::PinkySpawn;
+				tilemap[y][x] = tile::PinkySpawn;
 			}
 			else if (pixelColor == inkySpawnColor) {
-				tilemap[x][y] = tile::InkySpawn;
+				tilemap[y][x] = tile::InkySpawn;
 			}
 			else if (pixelColor == clydeSpawnColor) {
-				tilemap[x][y] = tile::ClydeSpawn;
+				tilemap[y][x] = tile::ClydeSpawn;
 			}
 			else if (pixelColor == pacmanSpawnColor) {
-				tilemap[x][y] = tile::PacmanSpawn;
+				tilemap[y][x] = tile::PacmanSpawn;
 			}
 			else {
-				tilemap[x][y] = -1;
+				tilemap[y][x] = tile::Void;
 			}
 		}
 	}
+
 	Log::debug("Tilemap calculation has been ended");
 }
 

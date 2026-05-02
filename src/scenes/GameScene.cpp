@@ -3,7 +3,7 @@
 	
 GameScene::GameScene(GameContext& context, ISceneSwitcher& ss) :
 	Scene(context, ss),
-	scale(2.f),
+	scale(3.5f),
 	maze(context, scale),
 	pacman(context, scale),
 	blinky(context, GhostType::Blinky, scale),
@@ -12,6 +12,8 @@ GameScene::GameScene(GameContext& context, ISceneSwitcher& ss) :
 	clyde(context, GhostType::Clyde, scale)
 
 {
+	sf::Vector2u winSize = context.window.getSize();
+	gameView.setSize(winSize.x, winSize.y);
 	context.assetsManager.playSound("start");
 	Log::debug(std::to_string(context.settings.viewWidth));
 }
@@ -39,6 +41,8 @@ void GameScene::update(float dt) {
 }
 
 void GameScene::render() {
+
+	
 	pacman.render(context.window);
 	maze.render(context.window);
 

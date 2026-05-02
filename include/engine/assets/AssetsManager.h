@@ -9,6 +9,7 @@ enum tile {
 	Wall,
 	Border,
 	Teleport,
+	Void,
 	BlinkySpawn,
 	PinkySpawn,
 	InkySpawn,

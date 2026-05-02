@@ -18,6 +18,8 @@ private:
 
 	Maze maze;
 
+	sf::View gameView;
+
 public:
 	GameScene(GameContext& context, ISceneSwitcher& ss);
 	void handleEvent(const sf::Event& event) override;
