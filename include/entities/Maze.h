@@ -6,6 +6,8 @@
 
 class Maze {
 private:
+	GameContext& context;
+
 	std::vector<std::vector<sf::Sprite>> sprites;
 	std::vector<std::vector<int>>& tilemap;
 

@@ -5,7 +5,7 @@
 Pacman::Pacman(GameContext& context, float scale) :
 	context(context),
 	scale(scale),
-	speedPerSec(100.f),
+	speedPerSec(200.f),
 	pacmanMoveTexture(context.assetsManager.getTexture("pacmanMove")),
 	pacmanMove(
 		pacmanMoveTexture, // texture
@@ -102,6 +102,8 @@ void Pacman::update(sf::RenderWindow& window, float dt) {
 	sf::Vector2u t2 = calcSqrPos(p2);
 	sf::Vector2u t3 = calcSqrPos(p3);
 	sf::Vector2u t4 = calcSqrPos(p4);
+	sf::Vector2u center = calcSqrPos({ newPosition.x + size/ 2.f, newPosition.y + size/ 2.f });
+
 
 	auto isFree = [&](sf::Vector2u pos) {
 		return pos.y < tilemap.size() &&
@@ -110,9 +112,26 @@ void Pacman::update(sf::RenderWindow& window, float dt) {
 			tilemap[pos.y][pos.x] != tile::Border;
 		};
 
+	sf::Vector2u moneyPos;
+	auto isMoney = [&](sf::Vector2u pos) {
+		if (pos.y < tilemap.size() &&
+			pos.x < tilemap[0].size() &&
+			tilemap[pos.y][pos.x] == tile::Money) {
+				moneyPos = pos;
+				return true;
+		}
+		return false;
+		};
+
+
 	if (isFree(t1) && isFree(t2) && isFree(t3) && isFree(t4)) {
 		pacman.setPosition(newPosition);
 	}
+
+	if (isMoney(center)) {
+		context.eventQueue.push(GameEvent{ EventType::CoinCollected, {moneyPos.x, moneyPos.y} });
+		Log::debug("Event CoinCollected has been pushed");
+	};
 
 	pacmanMove.update(dt);
 	pacmanMove.applyToSprite(pacman);

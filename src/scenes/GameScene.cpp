@@ -32,12 +32,12 @@ void GameScene::handleEvent(const sf::Event& event) {
 
 void GameScene::update(float dt) {
 	pacman.update(context.window, dt);
+	maze.update(context.window, dt);
 
 	blinky.update(context.window, dt);
 	pinky.update(context.window, dt);
 	inky.update(context.window, dt);
 	clyde.update(context.window, dt);
-
 }
 
 void GameScene::render() {

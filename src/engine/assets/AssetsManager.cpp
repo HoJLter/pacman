@@ -44,6 +44,7 @@ AssetsManager::AssetsManager() {
 
 	addTexture("bonuses", "assets/game/maze/bonuses.png");
 	addTexture("border", "assets/game/maze/border.png");
+	addTexture("void", "assets/game/maze/void.png");
 	addTexture("maze", "assets/game/maze/maze.png");
 	addTexture("money", "assets/game/money.png");
 	addTexture("blinky", "assets/game/ghosts/blinky.png");
@@ -55,6 +56,7 @@ AssetsManager::AssetsManager() {
 	addTexture("icon", "assets/game/icon.png");
 	addTexture("tilemap", "assets/game/tileMap1.png");
 	addSound("start", "assets/sounds/startSound.mp3");
+
 
 	calcTilemap();
 	logTilemap();

@@ -2,7 +2,8 @@
 
 Maze::Maze(GameContext& context, float scale) :
 	tilemap(context.assetsManager.getTilemap()),
-	scale(scale)
+	scale(scale),
+	context(context)
 {
 	tilemap = context.assetsManager.getTilemap();
 	tilemapSize = {
@@ -42,7 +43,17 @@ void Maze::handleEvent(const sf::Event& event) {
 }
 
 void Maze::update(sf::RenderWindow& window, float dt) {
-
+	if (!context.eventQueue.empty()) {
+		GameEvent& event = context.eventQueue.front();
+		if (event.type == EventType::CoinCollected) {
+			Log::debug("Event CoinCollected has been catcherd");
+			context.eventQueue.pop();
+		
+			tilemap[event.tilePos.y][event.tilePos.x] = tile::Void;
+			sprites[event.tilePos.y][event.tilePos.x].setTexture(context.assetsManager.getTexture("void"));
+		}
+		tilemap = context.assetsManager.getTilemap();
+	}
 }
 
 void Maze::render(sf::RenderWindow& window) {
