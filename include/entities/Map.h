@@ -11,14 +11,14 @@ private:
 	float scale;
 	int TS;
 	
-	float offsetX;
-	float offsetY;
+	sf::Vector2f mapOffset;
 
 	std::vector<std::vector<sf::Sprite>> sprites;
 	std::vector<std::vector<int>>& tilemap;
 	sf::Vector2u tilemapSize;
 
 	sf::IntRect calcWallType(int x, int y, tile tiletype);
+	sf::Vector2f calcOffset();
 public:
 	Map(GameContext& context, float scale);
 

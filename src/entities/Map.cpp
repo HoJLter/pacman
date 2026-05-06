@@ -3,7 +3,8 @@
 Map::Map(GameContext& context, float scale) :
 	tilemap(context.assetsManager.getTilemap()),
 	scale(scale),
-	context(context)
+	context(context),
+	TS(16)
 {
 	tilemap = context.assetsManager.getTilemap();
 	tilemapSize = {
@@ -11,13 +12,15 @@ Map::Map(GameContext& context, float scale) :
 		static_cast<unsigned>(tilemap.size())
 	};
 
+	mapOffset = calcOffset();
+
 	sprites.resize(tilemap.size(), std::vector<sf::Sprite>(tilemap[0].size()));
 
 	for (int y = 0; y < tilemap.size(); y++) {
 		for (int x = 0; x < tilemap[0].size(); x++) {
 
 			sf::Sprite sprite;
-			sprite.setTextureRect(sf::IntRect({ 0, 0 }, { 16, 16 }));
+			sprite.setTextureRect(sf::IntRect({ 0, 0 }, { TS, TS }));
 
 			if (tilemap[y][x] == tile::Wall) {
 				sprite.setTexture(context.assetsManager.getTexture("maze"));
@@ -31,7 +34,7 @@ Map::Map(GameContext& context, float scale) :
 				sprite.setTexture(context.assetsManager.getTexture("money"));
 			}
 
-			sprite.setPosition(x * 16, y * 16);
+			sprite.setPosition(x * TS, y * TS);
 
 			sprites[y][x] = sprite;
 		}
@@ -43,6 +46,8 @@ void Map::handleEvent(const sf::Event& event) {
 }
 
 void Map::update(sf::RenderWindow& window, float dt) {
+	mapOffset = calcOffset();
+
 	if (!context.eventQueue.empty()) {
 		GameEvent& event = context.eventQueue.front();
 		if (event.type == EventType::CoinCollected) {
@@ -57,25 +62,11 @@ void Map::update(sf::RenderWindow& window, float dt) {
 }
 
 void Map::render(sf::RenderWindow& window) {
-	int tileSize = 16;
-
-	int mapWidth = tilemap[0].size();
-	int mapHeight = tilemap.size();
-
-	sf::View view = window.getView();
-	sf::Vector2f viewSize = view.getSize();
-
-	float mapPixelWidth = mapWidth * tileSize * scale;
-	float mapPixelHeight = mapHeight * tileSize * scale;
-
-	offsetX = (viewSize.x - mapPixelWidth) / 2.0f;
-	offsetY = (viewSize.y - mapPixelHeight) / 2.0f;
-
-	for (int y = 0; y < mapHeight; y++) {
-		for (int x = 0; x < mapWidth; x++) {
+	for (int y = 0; y < tilemapSize.y; y++) {
+		for (int x = 0; x < tilemapSize.x; x++) {
 			sprites[y][x].setPosition({
-				offsetX + x * tileSize * scale,
-				offsetY + y * tileSize * scale
+				mapOffset.x + x * TS * scale,
+				mapOffset.y + y * TS * scale
 				});
 
 			sprites[y][x].setScale({ scale, scale });
@@ -91,8 +82,6 @@ sf::IntRect Map::calcWallType(int i, int j, tile tiletype) {
 		bool down = (i + 1 < tilemap.size()) && tilemap[i + 1][j] == tile::Wall;
 		bool left = (j > 0) && tilemap[i][j - 1] == tile::Wall;
 		bool right = (j + 1 < tilemap[i].size()) && tilemap[i][j + 1] == tile::Wall;
-
-		int TS = 16;
 
 		if (right && !left && !up && !down)
 			return sf::IntRect({ 0 * TS, 0 * TS }, { TS, TS });
@@ -178,19 +167,46 @@ sf::IntRect Map::calcWallType(int i, int j, tile tiletype) {
 }
 
 
+sf::Vector2f Map::calcOffset() {
+	sf::View view = context.window.getView();
+
+	sf::Vector2f viewCenter = view.getCenter();
+	sf::Vector2f viewSize = view.getSize();
+
+	sf::Vector2f viewOffset = { 
+		viewCenter.x - (viewSize.x / 2.f),
+		viewCenter.y - (viewSize.y / 2.f)
+	};
+
+	sf::Vector2f mapSize = {
+		tilemap[0].size() * TS * scale,
+		tilemap.size() * TS * scale
+	}; 
+	
+	sf::Vector2f mapOffset = {
+		(viewOffset.x + ((viewSize.x - mapSize.x) / 2.f)),
+		(viewOffset.y + ((viewSize.y - mapSize.y) / 2.f))
+	};
+
+	return mapOffset;
+}
+
+
 sf::Vector2u Map::posToGrid(sf::Vector2f pos) {
 	sf::Vector2u sqrNum = {
-		static_cast<unsigned>(((pos.x - offsetX)) / (TS * scale)),
-		static_cast<unsigned>(((pos.y - offsetY)) / (TS * scale))
+		static_cast<unsigned>(((pos.x - mapOffset.x)) / (TS * scale)),
+		static_cast<unsigned>(((pos.y - mapOffset.y)) / (TS * scale))
 	};
 
 	return sqrNum;
 }
 
 sf::Vector2f Map::gridToPos(sf::Vector2u pos) {
+	sf::View view = context.window.getView();
+
 	sf::Vector2f sqrNum = {
-		static_cast<float>(pos.x * TS * scale + offsetX + ((TS / 2) * scale)),
-		static_cast<float>(pos.y * TS * scale + offsetY + ((TS/2) * scale))
+		static_cast<float>(pos.x * TS * scale + mapOffset.x + ((TS / 2) * scale)),
+		static_cast<float>(pos.y * TS * scale + mapOffset.y + ((TS/2) * scale))
 	};
 
 	return sqrNum;
