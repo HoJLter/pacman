@@ -4,13 +4,16 @@
 #include "engine/GameContext.h"
 #include "utils/Log.h"
 #include <vector>
+#include <map>
+
+
 
 class Map: public IMap {
 private:
 	GameContext& context;
-	float scale;
-	int TS;
 	
+	int TS;
+	float scale;
 	sf::Vector2f mapOffset;
 
 	std::vector<std::vector<sf::Sprite>> sprites;
@@ -24,7 +27,7 @@ public:
 
 	sf::Vector2u getSize() override { return tilemapSize; };
 	sf::Vector2u posToGrid(sf::Vector2f pos) override;
-	sf::Vector2f gridToPos(sf::Vector2u gridPos) override;
+	sf::Vector2f gridToPos(sf::Vector2i gridPos) override;
 
 	void handleEvent(const sf::Event& event);
 	void update(sf::RenderWindow& window, float dt);

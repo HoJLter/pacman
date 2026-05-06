@@ -6,24 +6,36 @@ Pacman::Pacman(GameContext& context,IMap& map, float scale) :
 	context(context),
 	scale(scale),
 	map(map),
+	TS(16),
 	speedPerSec(150.f),
 	pacmanMoveTexture(context.assetsManager.getTexture("pacmanMove")),
 	pacmanMove(
 		pacmanMoveTexture, // texture
 		2,                 // frames
-		16,                // frameWidth
-		16,                // frameHeight
+		TS,                // frameWidth
+		TS,                // frameHeight
 		0,                 // row
 		0.1f			   // animation speed (in seconds)
 	),
 	tilemap(context.assetsManager.getTilemap())
 {
-	curDirection = MoveDirection::None;
+	//bool isFound = false;
+	//for (int y = 0; y < map.getSize().y; y++) {
+	//	for (int x = 0; x < map.getSize().x; x++) {
+	//		if (tilemap[y][x] == tile::PacmanSpawn) {
+	//			pacman.setPosition(map.gridToPos({x, y }));
+	//			isFound = true;
+	//			break;
+	//		}
+	//	}
+	//	if (isFound) break;
+	//}
 
+	curDirection = MoveDirection::None;
+	
 	Log::debug("Pacman has been created");
 	pacman.setTexture(pacmanMoveTexture);
-	pacman.setTextureRect(sf::IntRect({0, 0}, {16, 16}));
-	pacman.setPosition({context.settings.viewWidth/2.f, context.settings.viewHeight/2.f});
+	pacman.setTextureRect(sf::IntRect({0, 0}, {TS, TS}));
 	pacman.setScale({ scale, scale });
 }
 
@@ -80,7 +92,7 @@ void Pacman::update(sf::RenderWindow& window, float dt) {
 	}
 
 
-	float size = 16.0f * scale;
+	float size = TS * scale;
 	float inset = 3.f * scale; 
 
 	sf::Vector2f p1 = { newPosition.x + inset, newPosition.y + inset };
@@ -140,15 +152,15 @@ void Pacman::update(sf::RenderWindow& window, float dt) {
 			tpPos.y == leftTpPos.y) {
 			Log::debug("Left teleport has been used");
 			pacman.setPosition({
-				static_cast<float>((rightTpPos.x-1) * 16 * scale + size / 2),
-				static_cast<float>(rightTpPos.y*16*scale + size/2)});
+				static_cast<float>((rightTpPos.x-1) * TS * scale + size / 2),
+				static_cast<float>(rightTpPos.y*TS*scale + size/2)});
 		}
 		else if (tpPos.x == rightTpPos.x &&
 			tpPos.y == rightTpPos.y){
 			Log::debug("Right teleport has been used");
 			pacman.setPosition({ 
-				static_cast<float>((leftTpPos.x+2) * 16 * scale + size / 2),
-				static_cast<float>(leftTpPos.y*16*scale + size / 2)});
+				static_cast<float>((leftTpPos.x+2) * TS * scale + size / 2),
+				static_cast<float>(leftTpPos.y*TS*scale + size / 2)});
 		}
 	}
 

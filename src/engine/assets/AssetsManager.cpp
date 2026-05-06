@@ -42,7 +42,7 @@ void AssetsManager::addSound(std::string name, std::string path) {
 AssetsManager::AssetsManager() {
 	addFont("pixel", "assets/fonts/pixel-font.otf");
 
-	addTexture("bonuses", "assets/game/maze/bonuses.png");
+	//addTexture("bonuses", "assets/game/maze/bonuses.png");
 	addTexture("border", "assets/game/maze/border.png");
 	addTexture("void", "assets/game/maze/void.png");
 	addTexture("maze", "assets/game/maze/maze.png");

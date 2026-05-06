@@ -21,6 +21,9 @@ Map::Map(GameContext& context, float scale) :
 
 			sf::Sprite sprite;
 			sprite.setTextureRect(sf::IntRect({ 0, 0 }, { TS, TS }));
+			sf::Vector2u coords = {
+				static_cast<unsigned>(x),
+				static_cast<unsigned>(y) };
 
 			if (tilemap[y][x] == tile::Wall) {
 				sprite.setTexture(context.assetsManager.getTexture("maze"));
@@ -33,6 +36,7 @@ Map::Map(GameContext& context, float scale) :
 			else if (tilemap[y][x] == tile::Money) {
 				sprite.setTexture(context.assetsManager.getTexture("money"));
 			}
+
 
 			sprite.setPosition(x * TS, y * TS);
 
@@ -201,7 +205,7 @@ sf::Vector2u Map::posToGrid(sf::Vector2f pos) {
 	return sqrNum;
 }
 
-sf::Vector2f Map::gridToPos(sf::Vector2u pos) {
+sf::Vector2f Map::gridToPos(sf::Vector2i pos) {
 	sf::View view = context.window.getView();
 
 	sf::Vector2f sqrNum = {

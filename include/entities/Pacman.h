@@ -10,15 +10,16 @@ class Pacman {
 private:
 	GameContext& context;
 	sf::Sprite pacman;
+	int TS;
+
+	MoveDirection curDirection;
+	float speedPerSec;
+	float scale;
 
 	Animation pacmanMove;
 	sf::Texture pacmanMoveTexture;
 	sf::Clock animationClock;
 	
-	MoveDirection curDirection;
-	float speedPerSec;
-	float scale;
-
 	std::vector<std::vector<int>>& tilemap;
 	IMap& map;
 public:

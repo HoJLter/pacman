@@ -6,10 +6,10 @@ GameScene::GameScene(GameContext& context, ISceneSwitcher& ss) :
 	scale(3.5f),
 	map(context, scale),
 	pacman(context, map, scale),
-	blinky(context, GhostType::Blinky, scale),
-	pinky(context, GhostType::Pinky, scale),
-	inky(context, GhostType::Inky, scale),
-	clyde(context, GhostType::Clyde, scale),
+	blinky(context, map, GhostType::Blinky, scale),
+	pinky(context, map, GhostType::Pinky, scale),
+	inky(context, map, GhostType::Inky, scale),
+	clyde(context, map, GhostType::Clyde, scale),
 	score("Score: ", { 100.f, 20.f }, 16, sf::Color::Yellow, context.assetsManager)
 
 {
