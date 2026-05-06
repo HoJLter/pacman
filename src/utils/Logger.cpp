@@ -58,7 +58,7 @@ FileLogger::FileLogger(std::string filename) : ofs(filename) {
 	}
 }
 
-FileLogger::FileLogger(): ofs("app.log") {
+FileLogger::FileLogger() : ofs("app.log") {
 	if (!ofs.is_open()) {
 		throw std::runtime_error("[ERROR] Log file create error");
 	}

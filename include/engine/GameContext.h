@@ -14,10 +14,15 @@ struct GameEvent {
 	sf::Vector2u tilePos;
 };
 
+struct GameData {
+	int score;
+};
+
 struct GameContext {
 	sf::RenderWindow& window;
 	AssetsManager& assetsManager;
 	GameSettings& settings;
 
 	std::queue<GameEvent> eventQueue;
+	GameData data;
 };

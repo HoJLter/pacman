@@ -8,7 +8,7 @@ GameEngine::GameEngine(int w, int h) :
 	window(sf::VideoMode(sf::VideoMode(w, h)), "PACMAN GAME"),
 	settings{1920.f, 1080.f},
 	assetsManager(),
-	context{ window, assetsManager, settings },
+	context{ window, assetsManager, settings},
 	sceneManager(context)
 {
 	view = sf::View(sf::FloatRect(0.f, 0.f, settings.viewWidth, settings.viewHeight));

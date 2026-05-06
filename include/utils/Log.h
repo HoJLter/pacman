@@ -2,6 +2,7 @@
 #include <string>
 #include <memory>
 
+
 class ILogger;
 
 enum class LogLevel {

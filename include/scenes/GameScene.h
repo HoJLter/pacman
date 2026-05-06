@@ -1,5 +1,5 @@
 #pragma once
-#include "entities/Maze.h"
+#include "entities/Map.h"
 #include "scenes/Scene.h"
 #include "ui/Label.h"
 #include "entities/Pacman.h"
@@ -10,16 +10,15 @@ class GameScene : public Scene {
 private:
 	float scale;
 
+	Map map;
+
 	Pacman pacman;
 	Ghost blinky;
 	Ghost pinky;
 	Ghost inky;
 	Ghost clyde;
 
-	Maze maze;
-
-	sf::View gameView;
-
+	Label score;
 public:
 	GameScene(GameContext& context, ISceneSwitcher& ss);
 	void handleEvent(const sf::Event& event) override;

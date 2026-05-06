@@ -1,14 +1,14 @@
-#include "entities/Maze.h"
+#include "entities/Map.h"
 
-Maze::Maze(GameContext& context, float scale) :
+Map::Map(GameContext& context, float scale) :
 	tilemap(context.assetsManager.getTilemap()),
 	scale(scale),
 	context(context)
 {
 	tilemap = context.assetsManager.getTilemap();
 	tilemapSize = {
-		static_cast<float>(tilemap[0].size()),
-		static_cast<float>(tilemap.size())
+		static_cast<unsigned>(tilemap[0].size()),
+		static_cast<unsigned>(tilemap.size())
 	};
 
 	sprites.resize(tilemap.size(), std::vector<sf::Sprite>(tilemap[0].size()));
@@ -21,11 +21,11 @@ Maze::Maze(GameContext& context, float scale) :
 
 			if (tilemap[y][x] == tile::Wall) {
 				sprite.setTexture(context.assetsManager.getTexture("maze"));
-				sprite.setTextureRect(calculateTile(y, x, tile::Wall));
+				sprite.setTextureRect(calcWallType(y, x, tile::Wall));
 			}
 			else if (tilemap[y][x] == tile::Border) {
 				sprite.setTexture(context.assetsManager.getTexture("border"));
-				sprite.setTextureRect(calculateTile(y, x, tile::Border));
+				sprite.setTextureRect(calcWallType(y, x, tile::Border));
 			}
 			else if (tilemap[y][x] == tile::Money) {
 				sprite.setTexture(context.assetsManager.getTexture("money"));
@@ -38,11 +38,11 @@ Maze::Maze(GameContext& context, float scale) :
 	}
 }
 
-void Maze::handleEvent(const sf::Event& event) {
+void Map::handleEvent(const sf::Event& event) {
 	
 }
 
-void Maze::update(sf::RenderWindow& window, float dt) {
+void Map::update(sf::RenderWindow& window, float dt) {
 	if (!context.eventQueue.empty()) {
 		GameEvent& event = context.eventQueue.front();
 		if (event.type == EventType::CoinCollected) {
@@ -56,7 +56,7 @@ void Maze::update(sf::RenderWindow& window, float dt) {
 	}
 }
 
-void Maze::render(sf::RenderWindow& window) {
+void Map::render(sf::RenderWindow& window) {
 	int tileSize = 16;
 
 	int mapWidth = tilemap[0].size();
@@ -68,8 +68,8 @@ void Maze::render(sf::RenderWindow& window) {
 	float mapPixelWidth = mapWidth * tileSize * scale;
 	float mapPixelHeight = mapHeight * tileSize * scale;
 
-	float offsetX = (viewSize.x - mapPixelWidth) / 2.0f;
-	float offsetY = (viewSize.y - mapPixelHeight) / 2.0f;
+	offsetX = (viewSize.x - mapPixelWidth) / 2.0f;
+	offsetY = (viewSize.y - mapPixelHeight) / 2.0f;
 
 	for (int y = 0; y < mapHeight; y++) {
 		for (int x = 0; x < mapWidth; x++) {
@@ -84,7 +84,7 @@ void Maze::render(sf::RenderWindow& window) {
 	}
 }
 
-sf::IntRect Maze::calculateTile(int i, int j, tile tiletype) {
+sf::IntRect Map::calcWallType(int i, int j, tile tiletype) {
 	switch (tiletype) {
 	case tile::Wall: {
 		bool up = (i > 0) && tilemap[i - 1][j] == tile::Wall;
@@ -175,4 +175,23 @@ sf::IntRect Maze::calculateTile(int i, int j, tile tiletype) {
 				return sf::IntRect({ 1 * TS, 1 * TS }, { TS, TS });
 		}
 	}
+}
+
+
+sf::Vector2u Map::posToGrid(sf::Vector2f pos) {
+	sf::Vector2u sqrNum = {
+		static_cast<unsigned>(((pos.x - offsetX)) / (TS * scale)),
+		static_cast<unsigned>(((pos.y - offsetY)) / (TS * scale))
+	};
+
+	return sqrNum;
+}
+
+sf::Vector2f Map::gridToPos(sf::Vector2u pos) {
+	sf::Vector2f sqrNum = {
+		static_cast<float>(pos.x * TS * scale + offsetX + ((TS / 2) * scale)),
+		static_cast<float>(pos.y * TS * scale + offsetY + ((TS/2) * scale))
+	};
+
+	return sqrNum;
 }

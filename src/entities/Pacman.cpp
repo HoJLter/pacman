@@ -2,10 +2,11 @@
 #include "utils/Log.h"
 
 
-Pacman::Pacman(GameContext& context, float scale) :
+Pacman::Pacman(GameContext& context,IMap& map, float scale) :
 	context(context),
 	scale(scale),
-	speedPerSec(400.f),
+	map(map),
+	speedPerSec(150.f),
 	pacmanMoveTexture(context.assetsManager.getTexture("pacmanMove")),
 	pacmanMove(
 		pacmanMoveTexture, // texture
@@ -19,21 +20,6 @@ Pacman::Pacman(GameContext& context, float scale) :
 {
 	curDirection = MoveDirection::None;
 
-	int TS = 16;
-	sf::Vector2f viewSize = context.window.getView().getSize();
-	int tilesY = context.assetsManager.getTilemap().size();
-	int tilesX = context.assetsManager.getTilemap()[0].size();
-	
-	sf::View view = context.window.getView();
-
-	sf::Vector2f viewCenter = view.getCenter();
-
-	float viewLeft = viewCenter.x - viewSize.x / 2.0f;
-	float viewTop = viewCenter.y - viewSize.y / 2.0f;
-
-	mapOffsetX = viewLeft + (viewSize.x - (tilesX * 16 * scale)) / 2.0f;
-	mapOffsetY = viewTop + (viewSize.y - (tilesY * 16 * scale)) / 2.0f;
-
 	Log::debug("Pacman has been created");
 	pacman.setTexture(pacmanMoveTexture);
 	pacman.setTextureRect(sf::IntRect({0, 0}, {16, 16}));
@@ -45,21 +31,25 @@ void Pacman::handleEvent(const sf::Event& event) {
 	if (event.type == sf::Event::KeyPressed) {
 		switch (event.key.code) {
 			case sf::Keyboard::Up: {
+				Log::debug("UP BUTTON");
 				pacmanMove.changeRow(2);
 				curDirection = MoveDirection::Up;
 				break;
 			}
 			case sf::Keyboard::Down: {
+				Log::debug("DOWN BUTTON");
 				pacmanMove.changeRow(3);
 				curDirection = MoveDirection::Down;
 				break;
 			}
 			case sf::Keyboard::Left: {
+				Log::debug("LEFT BUTTON");
 				pacmanMove.changeRow(1);
 				curDirection = MoveDirection::Left;
 				break;
 			}
 			case sf::Keyboard::Right: {
+				Log::debug("RIGHT BUTTON");
 				pacmanMove.changeRow(0);
 				curDirection = MoveDirection::Right;
 				break;
@@ -98,12 +88,11 @@ void Pacman::update(sf::RenderWindow& window, float dt) {
 	sf::Vector2f p3 = { newPosition.x + inset, newPosition.y + size - inset };
 	sf::Vector2f p4 = { newPosition.x + size - inset, newPosition.y + size - inset };
 
-	sf::Vector2u t1 = posToSqr(p1);
-	sf::Vector2u t2 = posToSqr(p2);
-	sf::Vector2u t3 = posToSqr(p3);
-	sf::Vector2u t4 = posToSqr(p4);
-	sf::Vector2u center = posToSqr({ newPosition.x + size/ 2.f, newPosition.y + size/ 2.f });
-
+	sf::Vector2u t1 = map.posToGrid(p1);
+	sf::Vector2u t2 = map.posToGrid(p2);
+	sf::Vector2u t3 = map.posToGrid(p3);
+	sf::Vector2u t4 = map.posToGrid(p4);
+	sf::Vector2u center = map.posToGrid({ newPosition.x + size/ 2.f, newPosition.y + size/ 2.f });
 
 	auto isFree = [&](sf::Vector2u pos) {
 		return pos.y < tilemap.size() &&
@@ -134,13 +123,14 @@ void Pacman::update(sf::RenderWindow& window, float dt) {
 		return false;
 		};
 
-
 	if (isFree(t1) && isFree(t2) && isFree(t3) && isFree(t4)) {
+		Log::debug("WASSUP");
 		pacman.setPosition(newPosition);
 	}
 
 	if (isMoney(center)) {
 		context.eventQueue.push(GameEvent{ EventType::CoinCollected, {moneyPos.x, moneyPos.y} });
+		context.data.score += 20;
 		Log::debug("Event CoinCollected has been pushed");
 	};
 
@@ -166,17 +156,6 @@ void Pacman::update(sf::RenderWindow& window, float dt) {
 	pacmanMove.update(dt);
 	pacmanMove.applyToSprite(pacman);
 }
-
-sf::Vector2u Pacman::posToSqr(sf::Vector2f pos) {
-	int TS = 16;
-	sf::Vector2u sqrNum = {
-		static_cast<unsigned>(((pos.x - mapOffsetX)) / (16 * scale)),
-		static_cast<unsigned>(((pos.y - mapOffsetY)) / (16 * scale))
-	};
-
-	return sqrNum;
-}
-
 
 
 void Pacman::render(sf::RenderWindow& window) {

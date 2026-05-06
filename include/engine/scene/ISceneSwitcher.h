@@ -13,6 +13,8 @@ struct SharedData {
 
 class ISceneSwitcher {
 public:
+	virtual ~ISceneSwitcher() = default;
+	
 	SharedData shared;
 	virtual void requestSwitchScene(SceneID id) = 0;
 };
