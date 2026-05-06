@@ -83,6 +83,7 @@ void AssetsManager::playSound(const std::string& soundName) {
 		return;
 	}
 	sound.setBuffer(sounds[soundName]);
+	sound.setVolume(20.f);
 	Log::debug("Sound " + soundName + " is played");
 	activeSounds.push_back(sound);
 	activeSounds.back().play();

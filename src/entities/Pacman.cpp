@@ -92,7 +92,6 @@ void Pacman::update(sf::RenderWindow& window, float dt) {
 	sf::Vector2u t2 = map.posToGrid(p2);
 	sf::Vector2u t3 = map.posToGrid(p3);
 	sf::Vector2u t4 = map.posToGrid(p4);
-	Log::debug(std::to_string(t4.x) + " " + std::to_string(t4.y));
 	sf::Vector2u center = map.posToGrid({ newPosition.x + size/ 2.f, newPosition.y + size/ 2.f });
 
 	auto isFree = [&](sf::Vector2u pos) {
@@ -125,7 +124,6 @@ void Pacman::update(sf::RenderWindow& window, float dt) {
 		};
 
 	if (isFree(t1) && isFree(t2) && isFree(t3) && isFree(t4)) {
-		Log::debug("WASSUP");
 		pacman.setPosition(newPosition);
 	}
 
