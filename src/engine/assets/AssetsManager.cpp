@@ -87,7 +87,7 @@ void AssetsManager::playSound(const std::string& soundName) {
 	activeSounds.push_back(sound);
 	activeSounds.back().play();
 }
-
+ 
 void AssetsManager::cleanupSounds() {
 	for (auto it = activeSounds.begin(); it != activeSounds.end(); ) {
 		if (it->getStatus() == sf::Sound::Stopped) {

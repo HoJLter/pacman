@@ -2,8 +2,9 @@
 #include "utils/Log.h"
 
 
-Ghost::Ghost(GameContext& context, GhostType type, float scale):
+Ghost::Ghost(GameContext& context, IMap& map, GhostType type, sf::Vector2u initPos, float scale):
 	context(context),
+	map(map),
 	type(type),
 	scale(scale),
 	speedPerSec(200.f),
@@ -20,7 +21,7 @@ Ghost::Ghost(GameContext& context, GhostType type, float scale):
 	Log::debug(mapGhostType(type) + " has been created");
 	ghost.setTexture(ghostMoveTexture);
 	ghost.setTextureRect(sf::IntRect({ 0, 0 }, { 16, 16 }));
-	ghost.setPosition({ context.settings.viewWidth / 2.f, context.settings.viewHeight / 2.f });
+	ghost.setPosition(map.gridToPos(initPos));
 	ghost.setScale({ scale, scale });
 }
 

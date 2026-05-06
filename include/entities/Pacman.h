@@ -19,10 +19,9 @@ private:
 	float speedPerSec;
 	float scale;
 
-	std::vector<std::vector<int>>& tilemap;
 	IMap& map;
 public:
-	Pacman(GameContext& context, IMap&, float scale);
+	Pacman(GameContext& context, IMap&, sf::Vector2u initPos, float scale);
 
 	void handleEvent(const sf::Event& event);
 	void update(sf::RenderWindow& window, float dt);

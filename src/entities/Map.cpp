@@ -211,3 +211,38 @@ sf::Vector2f Map::gridToPos(sf::Vector2u pos) {
 
 	return sqrNum;
 }
+
+
+bool Map::isFree(sf::Vector2u pos) {
+	return pos.y < tilemap.size() &&
+		pos.x < tilemap[0].size() &&
+		tilemap[pos.y][pos.x] != tile::Wall &&
+		tilemap[pos.y][pos.x] != tile::Border;
+};
+
+bool Map::isMoney(sf::Vector2u pos) {
+	return pos.y < tilemap.size() &&
+		pos.x < tilemap[0].size() &&
+		tilemap[pos.y][pos.x] == tile::Money;
+};
+
+bool Map::isTeleport(sf::Vector2u pos) {
+	return pos.y < tilemap.size() &&
+		pos.x < tilemap[0].size() &&
+		tilemap[pos.y][pos.x] == tile::Teleport;
+};
+
+
+sf::Vector2u Map::getSingleTile(tile spawnTile) {
+	for (int y = 0; y < tilemapSize.y; y++) {
+		for (int x = 0; x < tilemapSize.x; x++) {
+			if (tilemap[y][x] == spawnTile) {
+				return {
+					static_cast<unsigned>(y), 
+					static_cast<unsigned>(x)
+				};
+			}
+		}
+	}
+	return { 0, 0 };
+};

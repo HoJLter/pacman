@@ -5,13 +5,12 @@ GameScene::GameScene(GameContext& context, ISceneSwitcher& ss) :
 	Scene(context, ss),
 	scale(3.5f),
 	map(context, scale),
-	pacman(context, map, scale),
-	blinky(context, GhostType::Blinky, scale),
-	pinky(context, GhostType::Pinky, scale),
-	inky(context, GhostType::Inky, scale),
-	clyde(context, GhostType::Clyde, scale),
+	pacman(context, map, map.getSingleTile(tile::PacmanSpawn), scale),
+	blinky(context, map, GhostType::Blinky, map.getSingleTile(tile::BlinkySpawn), scale),
+	pinky(context, map, GhostType::Pinky, map.getSingleTile(tile::PinkySpawn), scale),
+	inky(context, map, GhostType::Inky, map.getSingleTile(tile::InkySpawn), scale),
+	clyde(context, map, GhostType::Clyde, map.getSingleTile(tile::ClydeSpawn), scale),
 	score("Score: ", { 100.f, 20.f }, 16, sf::Color::Yellow, context.assetsManager)
-
 {
 	sf::Vector2u winSize = context.window.getSize();
 	context.assetsManager.playSound("start");
