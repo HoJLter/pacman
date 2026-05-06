@@ -21,9 +21,6 @@ Map::Map(GameContext& context, float scale) :
 
 			sf::Sprite sprite;
 			sprite.setTextureRect(sf::IntRect({ 0, 0 }, { TS, TS }));
-			sf::Vector2u coords = {
-				static_cast<unsigned>(x),
-				static_cast<unsigned>(y) };
 
 			if (tilemap[y][x] == tile::Wall) {
 				sprite.setTexture(context.assetsManager.getTexture("maze"));
@@ -36,7 +33,6 @@ Map::Map(GameContext& context, float scale) :
 			else if (tilemap[y][x] == tile::Money) {
 				sprite.setTexture(context.assetsManager.getTexture("money"));
 			}
-
 
 			sprite.setPosition(x * TS, y * TS);
 
@@ -61,7 +57,6 @@ void Map::update(sf::RenderWindow& window, float dt) {
 			tilemap[event.tilePos.y][event.tilePos.x] = tile::Void;
 			sprites[event.tilePos.y][event.tilePos.x].setTexture(context.assetsManager.getTexture("void"));
 		}
-		tilemap = context.assetsManager.getTilemap();
 	}
 }
 
@@ -205,7 +200,7 @@ sf::Vector2u Map::posToGrid(sf::Vector2f pos) {
 	return sqrNum;
 }
 
-sf::Vector2f Map::gridToPos(sf::Vector2i pos) {
+sf::Vector2f Map::gridToPos(sf::Vector2u pos) {
 	sf::View view = context.window.getView();
 
 	sf::Vector2f sqrNum = {
@@ -215,3 +210,39 @@ sf::Vector2f Map::gridToPos(sf::Vector2i pos) {
 
 	return sqrNum;
 }
+
+
+bool Map::isFree(sf::Vector2u pos) {
+	return pos.y < tilemap.size() &&
+		pos.x < tilemap[0].size() &&
+		tilemap[pos.y][pos.x] != tile::Wall &&
+		tilemap[pos.y][pos.x] != tile::Border;
+};
+
+bool Map::isMoney(sf::Vector2u pos) {
+	return pos.y < tilemap.size() &&
+		pos.x < tilemap[0].size() &&
+		tilemap[pos.y][pos.x] == tile::Money;
+};
+
+bool Map::isTeleport(sf::Vector2u pos) {
+	return pos.y < tilemap.size() &&
+		pos.x < tilemap[0].size() &&
+		tilemap[pos.y][pos.x] == tile::Teleport;
+};
+
+
+sf::Vector2u Map::getSingleTile(tile spawnTile) {
+	for (int y = 0; y < tilemapSize.y; y++) {
+		for (int x = 0; x < tilemapSize.x; x++) {
+			if (tilemap[y][x] == spawnTile) {
+				return {
+					static_cast<unsigned>(x), 
+					static_cast<unsigned>(y)
+				};
+			}
+		}
+	}
+	Log::warn("TILE NOT FOUND");
+	return { 0, 0 };
+};

@@ -10,20 +10,19 @@ class Pacman {
 private:
 	GameContext& context;
 	sf::Sprite pacman;
-	int TS;
-
-	MoveDirection curDirection;
-	float speedPerSec;
-	float scale;
 
 	Animation pacmanMove;
 	sf::Texture pacmanMoveTexture;
 	sf::Clock animationClock;
 	
-	std::vector<std::vector<int>>& tilemap;
+	MoveDirection curDirection;
+	float speedPerSec;
+	float scale;
+
+
 	IMap& map;
 public:
-	Pacman(GameContext& context, IMap&, float scale);
+	Pacman(GameContext& context, IMap&, sf::Vector2u initPos, float scale);
 
 	void handleEvent(const sf::Event& event);
 	void update(sf::RenderWindow& window, float dt);

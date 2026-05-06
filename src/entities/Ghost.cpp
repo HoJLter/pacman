@@ -2,11 +2,11 @@
 #include "utils/Log.h"
 
 
-Ghost::Ghost(GameContext& context, IMap& map, GhostType type, float scale):
+Ghost::Ghost(GameContext& context, IMap& map, GhostType type, sf::Vector2u initPos, float scale):
 	context(context),
+	map(map),
 	type(type),
 	scale(scale),
-	map(map),
 	speedPerSec(200.f),
 	ghostMoveTexture(context.assetsManager.getTexture(mapGhostType(type))),
 	ghostMove(
@@ -18,30 +18,10 @@ Ghost::Ghost(GameContext& context, IMap& map, GhostType type, float scale):
 		0.1f			   // animation speed (in seconds)
 	)
 {
-	Log::debug(mapGhostType(type) + " has been created");
-	curDirection = MoveDirection::None;
-	//switch (type) {
-	//	case GhostType::Blinky: {
-	//		ghost.setPosition(map.gridToPos(map.getSpawnCoords().blinky));
-	//		break;
-	//	}
-	//	case GhostType::Pinky: {
-	//		ghost.setPosition(map.gridToPos(map.getSpawnCoords().pinky));
-	//		break;
-	//	}
-	//	case GhostType::Inky: {
-	//		ghost.setPosition(map.gridToPos(map.getSpawnCoords().inky));
-	//		break;
-	//	}
-	//	case GhostType::Clyde: {
-	//		ghost.setPosition(map.gridToPos(map.getSpawnCoords().clyde));
-	//		break;
-	//	}
-	//}
-
+	Log::debug(mapGhostType(type) + " has been created. X: " + std::to_string(initPos.x) + " Y: " + std::to_string(initPos.y));
 	ghost.setTexture(ghostMoveTexture);
 	ghost.setTextureRect(sf::IntRect({ 0, 0 }, { 16, 16 }));
-	ghost.setPosition({ context.settings.viewWidth / 2.f, context.settings.viewHeight / 2.f });
+	ghost.setPosition(map.gridToPos(initPos));
 	ghost.setScale({ scale, scale });
 }
 

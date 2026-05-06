@@ -2,40 +2,26 @@
 #include "utils/Log.h"
 
 
-Pacman::Pacman(GameContext& context,IMap& map, float scale) :
+Pacman::Pacman(GameContext& context,IMap& map, sf::Vector2u initPos, float scale) :
 	context(context),
 	scale(scale),
 	map(map),
-	TS(16),
 	speedPerSec(150.f),
 	pacmanMoveTexture(context.assetsManager.getTexture("pacmanMove")),
 	pacmanMove(
 		pacmanMoveTexture, // texture
 		2,                 // frames
-		TS,                // frameWidth
-		TS,                // frameHeight
+		16,                // frameWidth
+		16,                // frameHeight
 		0,                 // row
 		0.1f			   // animation speed (in seconds)
-	),
-	tilemap(context.assetsManager.getTilemap())
+	)
 {
-	//bool isFound = false;
-	//for (int y = 0; y < map.getSize().y; y++) {
-	//	for (int x = 0; x < map.getSize().x; x++) {
-	//		if (tilemap[y][x] == tile::PacmanSpawn) {
-	//			pacman.setPosition(map.gridToPos({x, y }));
-	//			isFound = true;
-	//			break;
-	//		}
-	//	}
-	//	if (isFound) break;
-	//}
-
 	curDirection = MoveDirection::None;
-	
 	Log::debug("Pacman has been created");
 	pacman.setTexture(pacmanMoveTexture);
-	pacman.setTextureRect(sf::IntRect({0, 0}, {TS, TS}));
+	pacman.setTextureRect(sf::IntRect({0, 0}, {16, 16}));
+	pacman.setPosition(map.gridToPos(initPos));
 	pacman.setScale({ scale, scale });
 }
 
@@ -92,7 +78,7 @@ void Pacman::update(sf::RenderWindow& window, float dt) {
 	}
 
 
-	float size = TS * scale;
+	float size = 16.0f * scale;
 	float inset = 3.f * scale; 
 
 	sf::Vector2f p1 = { newPosition.x + inset, newPosition.y + inset };
@@ -106,61 +92,34 @@ void Pacman::update(sf::RenderWindow& window, float dt) {
 	sf::Vector2u t4 = map.posToGrid(p4);
 	sf::Vector2u center = map.posToGrid({ newPosition.x + size/ 2.f, newPosition.y + size/ 2.f });
 
-	auto isFree = [&](sf::Vector2u pos) {
-		return pos.y < tilemap.size() &&
-			pos.x < tilemap[0].size() &&
-			tilemap[pos.y][pos.x] != tile::Wall &&
-			tilemap[pos.y][pos.x] != tile::Border;
-		};
 
-	sf::Vector2u moneyPos;
-	auto isMoney = [&](sf::Vector2u pos) {
-		if (pos.y < tilemap.size() &&
-			pos.x < tilemap[0].size() &&
-			tilemap[pos.y][pos.x] == tile::Money) {
-				moneyPos = pos;
-				return true;
-		}
-		return false;
-		};
 
-	sf::Vector2u tpPos;
-	auto isTeleport = [&](sf::Vector2u pos) {
-		if (pos.y < tilemap.size() &&
-			pos.x < tilemap[0].size() &&
-			tilemap[pos.y][pos.x] == tile::Teleport) {
-			tpPos = pos;
-			return true;
-		}
-		return false;
-		};
-
-	if (isFree(t1) && isFree(t2) && isFree(t3) && isFree(t4)) {
+	if (map.isFree(t1) && map.isFree(t2) && map.isFree(t3) && map.isFree(t4)) {
 		pacman.setPosition(newPosition);
 	}
 
-	if (isMoney(center)) {
-		context.eventQueue.push(GameEvent{ EventType::CoinCollected, {moneyPos.x, moneyPos.y} });
+	if (map.isMoney(center)) {
+		context.eventQueue.push(GameEvent{ EventType::CoinCollected, {center.x, center.y} });
 		context.data.score += 20;
 		Log::debug("Event CoinCollected has been pushed");
 	};
 
-	if (isTeleport(center)) {
+	if (map.isTeleport(center)) {
 		sf::Vector2u rightTpPos = { 31, 9 };
 		sf::Vector2u leftTpPos = { 0, 9 };
-		if (tpPos.x == leftTpPos.x &&
-			tpPos.y == leftTpPos.y) {
+		if (center.x == leftTpPos.x &&
+			center.y == leftTpPos.y) {
 			Log::debug("Left teleport has been used");
 			pacman.setPosition({
-				static_cast<float>((rightTpPos.x-1) * TS * scale + size / 2),
-				static_cast<float>(rightTpPos.y*TS*scale + size/2)});
+				static_cast<float>((rightTpPos.x-1) * 16 * scale + size / 2),
+				static_cast<float>(rightTpPos.y*16*scale + size/2)});
 		}
-		else if (tpPos.x == rightTpPos.x &&
-			tpPos.y == rightTpPos.y){
+		else if (center.x == rightTpPos.x &&
+			center.y == rightTpPos.y){
 			Log::debug("Right teleport has been used");
 			pacman.setPosition({ 
-				static_cast<float>((leftTpPos.x+2) * TS * scale + size / 2),
-				static_cast<float>(leftTpPos.y*TS*scale + size / 2)});
+				static_cast<float>((leftTpPos.x+2) * 16 * scale + size / 2),
+				static_cast<float>(leftTpPos.y*16*scale + size / 2)});
 		}
 	}
 
