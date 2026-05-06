@@ -7,11 +7,11 @@
 
 class Map: public IMap {
 private:
+	sf::Vector2f mapOffset;
 	GameContext& context;
 	float scale;
 	int TS;
 	
-	sf::Vector2f mapOffset;
 
 	std::vector<std::vector<sf::Sprite>> sprites;
 	std::vector<std::vector<int>> tilemap;

@@ -18,7 +18,7 @@ Ghost::Ghost(GameContext& context, IMap& map, GhostType type, sf::Vector2u initP
 		0.1f			   // animation speed (in seconds)
 	)
 {
-	Log::debug(mapGhostType(type) + " has been created");
+	Log::debug(mapGhostType(type) + " has been created. X: " + std::to_string(initPos.x) + " Y: " + std::to_string(initPos.y));
 	ghost.setTexture(ghostMoveTexture);
 	ghost.setTextureRect(sf::IntRect({ 0, 0 }, { 16, 16 }));
 	ghost.setPosition(map.gridToPos(initPos));

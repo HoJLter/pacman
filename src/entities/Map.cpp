@@ -57,7 +57,6 @@ void Map::update(sf::RenderWindow& window, float dt) {
 			tilemap[event.tilePos.y][event.tilePos.x] = tile::Void;
 			sprites[event.tilePos.y][event.tilePos.x].setTexture(context.assetsManager.getTexture("void"));
 		}
-		tilemap = context.assetsManager.getTilemap();
 	}
 }
 
@@ -238,11 +237,12 @@ sf::Vector2u Map::getSingleTile(tile spawnTile) {
 		for (int x = 0; x < tilemapSize.x; x++) {
 			if (tilemap[y][x] == spawnTile) {
 				return {
-					static_cast<unsigned>(y), 
-					static_cast<unsigned>(x)
+					static_cast<unsigned>(x), 
+					static_cast<unsigned>(y)
 				};
 			}
 		}
 	}
+	Log::warn("TILE NOT FOUND");
 	return { 0, 0 };
 };

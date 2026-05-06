@@ -18,11 +18,10 @@ Pacman::Pacman(GameContext& context,IMap& map, sf::Vector2u initPos, float scale
 	)
 {
 	curDirection = MoveDirection::None;
-
 	Log::debug("Pacman has been created");
 	pacman.setTexture(pacmanMoveTexture);
 	pacman.setTextureRect(sf::IntRect({0, 0}, {16, 16}));
-	pacman.setPosition({context.settings.viewWidth/2.f, context.settings.viewHeight/2.f});
+	pacman.setPosition(map.gridToPos(initPos));
 	pacman.setScale({ scale, scale });
 }
 
