@@ -52,11 +52,11 @@ void Map::update(sf::RenderWindow& window, float dt) {
 	mapOffset = calcOffset();
 
 	if (!context.eventQueue.empty()) {
-		GameEvent& event = context.eventQueue.front();
+		GameEvent event = context.eventQueue.front();
 		if (event.type == EventType::CoinCollected) {
 			Log::debug("Event CoinCollected has been catcherd");
+			context.assetsManager.playSound("pickup");
 			context.eventQueue.pop();
-		
 			tilemap[event.tilePos.y][event.tilePos.x] = tile::Void;
 			sprites[event.tilePos.y][event.tilePos.x].setTexture(context.assetsManager.getTexture("void"));
 		}

@@ -1,6 +1,7 @@
 #pragma once
 #include <map>
 #include <string>
+#include <list>
 #include "SFML/Graphics.hpp"
 #include "SFML/Audio.hpp"
 
@@ -25,7 +26,7 @@ private:
 	std::map<std::string, sf::SoundBuffer> sounds;
 	std::vector<std::vector<int>> tilemap;
 
-	std::vector<sf::Sound> activeSounds;
+	std::list<sf::Sound> activeSounds;
 
 	void addFont(std::string name, std::string path);
 	void addTexture(std::string name, std::string path);

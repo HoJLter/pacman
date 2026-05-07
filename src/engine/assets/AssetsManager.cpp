@@ -57,6 +57,7 @@ AssetsManager::AssetsManager() {
 	addTexture("icon", "assets/game/icon.png");
 	addTexture("tilemap", "assets/game/tileMap1.png");
 	addSound("start", "assets/sounds/startSound.mp3");
+	addSound("pickup", "assets/sounds/pickup.mp3");
 
 
 	calcTilemap();
@@ -78,16 +79,16 @@ const sf::Texture& AssetsManager::getTexture(const std::string& textureName) {
 }
 
 void AssetsManager::playSound(const std::string& soundName) {
-	sf::Sound sound;
 	if (!sounds.count(soundName)) {
 		Log::error("Sound get error. Unknown sound");
 		return;
 	}
-	sound.setBuffer(sounds[soundName]);
-	sound.setVolume(20.f);
-	Log::debug("Sound " + soundName + " is played");
-	activeSounds.push_back(sound);
+	activeSounds.emplace_back();
+	activeSounds.back().setBuffer(sounds[soundName]);
+	activeSounds.back().setVolume(20.f);
 	activeSounds.back().play();
+
+	Log::debug("Sound " + soundName + " is played");
 }
  
 void AssetsManager::cleanupSounds() {

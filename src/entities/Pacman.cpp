@@ -94,7 +94,6 @@ void Pacman::update(sf::RenderWindow& window, float dt) {
 	sf::Vector2u center = map.posToGrid(newPosition);
 
 
-
 	if (map.isFree(t1) && map.isFree(t2) && map.isFree(t3) && map.isFree(t4)) {
 		pacman.setPosition(newPosition);
 	}
@@ -106,21 +105,21 @@ void Pacman::update(sf::RenderWindow& window, float dt) {
 	};
 
 	if (map.isTeleport(center)) {
-		sf::Vector2u rightTpPos = { 31, 9 };
 		sf::Vector2u leftTpPos = { 0, 9 };
+		sf::Vector2u rightTpPos = { 31, 9 };
+
+		sf::Vector2u leftTpTarget = { 30, 9 };
+		sf::Vector2u rightTpTarget = { 1, 9 };
+
 		if (center.x == leftTpPos.x &&
 			center.y == leftTpPos.y) {
 			Log::debug("Left teleport has been used");
-			pacman.setPosition({
-				static_cast<float>((rightTpPos.x-1) * 16 * scale + size / 2),
-				static_cast<float>(rightTpPos.y*16*scale + size/2)});
+			pacman.setPosition(map.gridToPos(leftTpTarget));
 		}
 		else if (center.x == rightTpPos.x &&
-			center.y == rightTpPos.y){
+			center.y == rightTpPos.y) {
 			Log::debug("Right teleport has been used");
-			pacman.setPosition({ 
-				static_cast<float>((leftTpPos.x+2) * 16 * scale + size / 2),
-				static_cast<float>(leftTpPos.y*16*scale + size / 2)});
+			pacman.setPosition(map.gridToPos(rightTpTarget));
 		}
 	}
 
