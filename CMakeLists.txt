@@ -12,7 +12,7 @@ file(GLOB_RECURSE SOURCES
     include/*.h
 )
 
-add_executable(app ${SOURCES})
+add_executable(app ${SOURCES} "include/engine/core/Algorithms.h" "src/engine/core/Algorithms.cpp")
 
 target_include_directories(app PRIVATE include)
 target_link_libraries(app PRIVATE sfml-graphics sfml-system sfml-window sfml-audio)

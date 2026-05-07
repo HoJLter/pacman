@@ -38,6 +38,24 @@ void Ghost::render(sf::RenderWindow& window) {
 }
 
 
+sf::Vector2u Ghost::calcBlinkyTarget() {
+	sf::Vector2u target;
+	return target;
+}
+sf::Vector2u Ghost::calcPinkyTarget() {
+	sf::Vector2u target;
+	return target;
+}
+sf::Vector2u Ghost::calcInkyTarget() {
+	sf::Vector2u target;
+	return target;
+}
+sf::Vector2u Ghost::calcClydeTarget() {
+	sf::Vector2u target;
+	return target;
+}
+
+
 sf::Vector2u Ghost::calcTarget() {
 	sf::Vector2u target;
 	switch (ghostType) {

@@ -20,8 +20,14 @@ private:
 
 	float speedPerSec;
 	float scale;
+	bool isFreezed;
 
 	sf::Vector2u calcTarget();
+	sf::Vector2u calcBlinkyTarget();
+	sf::Vector2u calcPinkyTarget();
+	sf::Vector2u calcInkyTarget();
+	sf::Vector2u calcClydeTarget();
+
 public:
 	Ghost::Ghost(GameContext& context, IMap& map, GhostType type, sf::Vector2u initPos, float scale);
 
