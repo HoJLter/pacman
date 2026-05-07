@@ -73,10 +73,12 @@ void GameScene::update(float dt) {
 		map.update(context.window, dt);
 		score.setString("Score " + std::to_string(context.data.score));
 
-		blinky.update(context.window, dt);
-		pinky.update(context.window, dt);
-		inky.update(context.window, dt);
-		clyde.update(context.window, dt);
+		sf::Vector2u pacmanPos = pacman.getCurPos();
+		MoveDirection pacmanDir = pacman.getCurDir();
+		blinky.update(context.window, pacmanPos, pacmanDir, {}, dt);
+		pinky.update(context.window, pacmanPos, pacmanDir, {}, dt);
+		inky.update(context.window, pacmanPos, pacmanDir, blinky.getCurPos(), dt);
+		clyde.update(context.window, pacmanPos, pacmanDir, {}, dt);
 	}
 	else {
 		

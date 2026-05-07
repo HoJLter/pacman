@@ -24,6 +24,7 @@ public:
 	Pacman(GameContext& context, IMap&, sf::Vector2u initPos, float scale);
 
 	sf::Vector2u getCurPos();
+	MoveDirection getCurDir() { return curDirection; }
 
 	void handleEvent(const sf::Event& event);
 	void update(sf::RenderWindow& window, float dt);
