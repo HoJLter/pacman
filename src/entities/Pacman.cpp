@@ -132,3 +132,7 @@ void Pacman::update(sf::RenderWindow& window, float dt) {
 void Pacman::render(sf::RenderWindow& window) {
 	window.draw(pacman);
 }
+
+sf::Vector2u Pacman::getCurPos() {
+	return map.posToGrid(pacman.getPosition());
+}

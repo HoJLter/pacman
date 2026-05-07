@@ -74,3 +74,7 @@ sf::Vector2u Ghost::calcTarget() {
 	}
 	return target;
 }
+
+sf::Vector2u Ghost::getCurPos() {
+	return map.posToGrid(ghost.getPosition());
+}

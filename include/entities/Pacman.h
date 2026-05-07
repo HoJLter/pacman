@@ -19,10 +19,11 @@ private:
 	float speedPerSec;
 	float scale;
 
-
 	IMap& map;
 public:
 	Pacman(GameContext& context, IMap&, sf::Vector2u initPos, float scale);
+
+	sf::Vector2u getCurPos();
 
 	void handleEvent(const sf::Event& event);
 	void update(sf::RenderWindow& window, float dt);

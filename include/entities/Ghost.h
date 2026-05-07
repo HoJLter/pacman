@@ -31,6 +31,8 @@ private:
 public:
 	Ghost::Ghost(GameContext& context, IMap& map, GhostType type, sf::Vector2u initPos, float scale);
 
+	sf::Vector2u getCurPos();
+
 	void handleEvent(const sf::Event& event);
 	void update(sf::RenderWindow& window, float dt);
 	void render(sf::RenderWindow& window);

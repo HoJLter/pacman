@@ -19,6 +19,8 @@ private:
 	Ghost clyde;
 
 	Label score;
+
+	bool checkLoose();
 public:
 	GameScene(GameContext& context, ISceneSwitcher& ss);
 	void handleEvent(const sf::Event& event) override;

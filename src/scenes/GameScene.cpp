@@ -53,3 +53,10 @@ void GameScene::render() {
 
 	score.render(context.window);
 }
+
+bool GameScene::checkLoose() {
+	return (pacman.getCurPos() == blinky.getCurPos() ||
+			pacman.getCurPos() == pinky.getCurPos() ||
+			pacman.getCurPos() == inky.getCurPos() ||
+			pacman.getCurPos() == clyde.getCurPos());
+}
