@@ -14,7 +14,8 @@ enum tile {
 	PinkySpawn,
 	InkySpawn,
 	ClydeSpawn,
-	PacmanSpawn
+	PacmanSpawn,
+	Gates
 };
 
 class AssetsManager {

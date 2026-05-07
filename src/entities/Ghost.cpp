@@ -5,7 +5,7 @@
 Ghost::Ghost(GameContext& context, IMap& map, GhostType type, sf::Vector2u initPos, float scale):
 	context(context),
 	map(map),
-	type(type),
+	ghostType(type),
 	scale(scale),
 	speedPerSec(200.f),
 	ghostMoveTexture(context.assetsManager.getTexture(mapGhostType(type))),
@@ -19,6 +19,7 @@ Ghost::Ghost(GameContext& context, IMap& map, GhostType type, sf::Vector2u initP
 	)
 {
 	Log::debug(mapGhostType(type) + " has been created. X: " + std::to_string(initPos.x) + " Y: " + std::to_string(initPos.y));
+	ghost.setOrigin(8.f, 8.f);
 	ghost.setTexture(ghostMoveTexture);
 	ghost.setTextureRect(sf::IntRect({ 0, 0 }, { 16, 16 }));
 	ghost.setPosition(map.gridToPos(initPos));
@@ -34,4 +35,24 @@ void Ghost::update(sf::RenderWindow& window, float dt) {
 }
 void Ghost::render(sf::RenderWindow& window) {
 	window.draw(ghost);
+}
+
+
+sf::Vector2u Ghost::calcTarget() {
+	sf::Vector2u target;
+	switch (ghostType) {
+		case GhostType::Blinky:{
+			break;
+		}
+		case GhostType::Pinky: {
+			break;
+		}
+		case GhostType::Inky: {
+			break;
+		}
+		case GhostType::Clyde: {
+			break;
+		}
+	}
+	return target;
 }

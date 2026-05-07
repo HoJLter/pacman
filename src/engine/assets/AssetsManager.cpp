@@ -43,6 +43,7 @@ AssetsManager::AssetsManager() {
 	addFont("pixel", "assets/fonts/pixel-font.otf");
 
 	//addTexture("bonuses", "assets/game/maze/bonuses.png");
+	addTexture("gates", "assets/game/maze/gates.png");
 	addTexture("border", "assets/game/maze/border.png");
 	addTexture("void", "assets/game/maze/void.png");
 	addTexture("maze", "assets/game/maze/maze.png");
@@ -127,6 +128,8 @@ void AssetsManager::calcTilemap() {
 	sf::Color moneyColor = sf::Color(223, 113, 38);
 	sf::Color borderColor = sf::Color(240, 33, 52);
 	sf::Color wallColor = sf::Color(33, 33, 240);
+	sf::Color gatesColor = sf::Color(251, 242, 54);
+
 	sf::Color teleportColor = sf::Color(33, 240, 64);
 
 	sf::Color blinkySpawnColor = sf::Color(165, 0, 0);
@@ -166,6 +169,9 @@ void AssetsManager::calcTilemap() {
 			}
 			else if (pixelColor == pacmanSpawnColor) {
 				tilemap[y][x] = tile::PacmanSpawn;
+			}
+			else if (pixelColor == gatesColor) {
+				tilemap[y][x] = tile::Gates;
 			}
 			else {
 				tilemap[y][x] = tile::Void;

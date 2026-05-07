@@ -22,6 +22,7 @@ Pacman::Pacman(GameContext& context,IMap& map, sf::Vector2u initPos, float scale
 	pacman.setTexture(pacmanMoveTexture);
 	pacman.setTextureRect(sf::IntRect({0, 0}, {16, 16}));
 	pacman.setPosition(map.gridToPos(initPos));
+	pacman.setOrigin(8.f, 8.f);
 	pacman.setScale({ scale, scale });
 }
 
@@ -81,16 +82,16 @@ void Pacman::update(sf::RenderWindow& window, float dt) {
 	float size = 16.0f * scale;
 	float inset = 3.f * scale; 
 
-	sf::Vector2f p1 = { newPosition.x + inset, newPosition.y + inset };
-	sf::Vector2f p2 = { newPosition.x + size - inset, newPosition.y + inset };
-	sf::Vector2f p3 = { newPosition.x + inset, newPosition.y + size - inset };
-	sf::Vector2f p4 = { newPosition.x + size - inset, newPosition.y + size - inset };
+	sf::Vector2f p1 = { newPosition.x - size / 2.f + inset, newPosition.y - size / 2.f + inset };
+	sf::Vector2f p2 = { newPosition.x + size / 2.f - inset, newPosition.y - size / 2.f + inset };
+	sf::Vector2f p3 = { newPosition.x - size / 2.f + inset, newPosition.y + size / 2.f - inset };
+	sf::Vector2f p4 = { newPosition.x + size / 2.f - inset, newPosition.y + size / 2.f - inset };
 
 	sf::Vector2u t1 = map.posToGrid(p1);
 	sf::Vector2u t2 = map.posToGrid(p2);
 	sf::Vector2u t3 = map.posToGrid(p3);
 	sf::Vector2u t4 = map.posToGrid(p4);
-	sf::Vector2u center = map.posToGrid({ newPosition.x + size/ 2.f, newPosition.y + size/ 2.f });
+	sf::Vector2u center = map.posToGrid(newPosition);
 
 
 

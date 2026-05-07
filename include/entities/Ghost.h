@@ -10,7 +10,7 @@ class Ghost {
 private:
 	GameContext& context;
 	IMap& map;
-	GhostType type;
+	GhostType ghostType;
 
 	sf::Sprite ghost;
 	sf::Texture ghostMoveTexture;
@@ -20,6 +20,8 @@ private:
 
 	float speedPerSec;
 	float scale;
+
+	sf::Vector2u calcTarget();
 public:
 	Ghost::Ghost(GameContext& context, IMap& map, GhostType type, sf::Vector2u initPos, float scale);
 

@@ -33,6 +33,9 @@ Map::Map(GameContext& context, float scale) :
 			else if (tilemap[y][x] == tile::Money) {
 				sprite.setTexture(context.assetsManager.getTexture("money"));
 			}
+			else if (tilemap[y][x] == tile::Gates) {
+				sprite.setTexture(context.assetsManager.getTexture("gates"));
+			}
 
 			sprite.setPosition(x * TS, y * TS);
 
