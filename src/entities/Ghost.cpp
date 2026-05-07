@@ -34,15 +34,108 @@ void Ghost::handleEvent(const sf::Event& event) {
 }
 
 void Ghost::update(sf::RenderWindow& window, sf::Vector2u pacmanPos, MoveDirection pacmanDir, sf::Vector2u blinkyPos, float dt) {
-	calcTarget(pacmanPos, blinkyPos, pacmanDir);
+	moveTarget = updateTarget(pacmanPos, blinkyPos, pacmanDir);
+	chooseDirection();
 	ghostMove.update(dt);
 	ghostMove.applyToSprite(ghost);
+
+
+	sf::Vector2f curPosition = ghost.getPosition();
+	sf::Vector2f newPosition = curPosition;
+
+	switch (curDirection) {
+	case MoveDirection::Up:
+		newPosition.y -= speedPerSec * dt;
+		break;
+
+	case MoveDirection::Down:
+		newPosition.y += speedPerSec * dt;
+		break;
+
+	case MoveDirection::Left:
+		newPosition.x -= speedPerSec * dt;
+		break;
+
+	case MoveDirection::Right:
+		newPosition.x += speedPerSec * dt;
+		break;
+	}
+
+
+	float size = 16.0f * scale;
+	float inset = 3.f * scale;
+
+	sf::Vector2f p1 = { newPosition.x - size / 2.f + inset, newPosition.y - size / 2.f + inset };
+	sf::Vector2f p2 = { newPosition.x + size / 2.f - inset, newPosition.y - size / 2.f + inset };
+	sf::Vector2f p3 = { newPosition.x - size / 2.f + inset, newPosition.y + size / 2.f - inset };
+	sf::Vector2f p4 = { newPosition.x + size / 2.f - inset, newPosition.y + size / 2.f - inset };
+
+	sf::Vector2u t1 = map.posToGrid(p1);
+	sf::Vector2u t2 = map.posToGrid(p2);
+	sf::Vector2u t3 = map.posToGrid(p3);
+	sf::Vector2u t4 = map.posToGrid(p4);
+	sf::Vector2u center = map.posToGrid(newPosition);
+
+
+	if (map.isFree(t1) && map.isFree(t2) && map.isFree(t3) && map.isFree(t4)) {
+		ghost.setPosition(newPosition);
+	}
 }
+
 
 void Ghost::render(sf::RenderWindow& window) {
 	window.draw(ghost);
 }
 
+
+void Ghost::chooseDirection() {
+	sf::Vector2u curPosition = map.posToGrid(ghost.getPosition());
+
+	sf::Vector2u top = { curPosition.x, curPosition.y - 1 };
+	sf::Vector2u bottom = { curPosition.x, curPosition.y + 1 };
+	sf::Vector2u left = { curPosition.x - 1, curPosition.y };
+	sf::Vector2u right = { curPosition.x + 1, curPosition.y };
+	std::vector<sf::Vector2u> neighbors = { top, bottom, left, right };
+
+	auto isFree = [&](sf::Vector2u pos) {
+		if (pos.x >= map.getSize().x || pos.y >= map.getSize().y) return false;
+		return (map.getTilemap()[pos.y][pos.x] != tile::Wall &&
+			map.getTilemap()[pos.y][pos.x] != tile::Border);
+		};
+
+	sf::Vector2u bestDir = curPosition;
+	float minDistance = std::numeric_limits<float>::max();
+
+	for (const auto& neighbor : neighbors) {
+		if (isFree(neighbor)) {
+			float curDistance = calcDistance(neighbor, moveTarget);
+			if (curDistance < minDistance) {
+				minDistance = curDistance;
+				bestDir = neighbor;
+			}
+		}
+	}
+
+	if (bestDir != curPosition) {
+		if (bestDir.y < curPosition.y) {
+			curDirection = MoveDirection::Up;
+		}
+		else if (bestDir.y > curPosition.y) {
+			curDirection = MoveDirection::Down;
+		}
+		else if (bestDir.x < curPosition.x) {
+			curDirection = MoveDirection::Left;
+		}
+		else if (bestDir.x > curPosition.x) {
+			curDirection = MoveDirection::Right;
+		}
+
+	}
+}
+
+
+
+// TARGETS
 
 sf::Vector2u Ghost::calcBlinkyTarget(sf::Vector2u pacmanPos, MoveDirection pacmanDir) {
 	sf::Vector2u target;
@@ -93,7 +186,6 @@ sf::Vector2u Ghost::calcInkyTarget(sf::Vector2u pacmanPos, sf::Vector2u blinkyPo
 	targetX = std::max(targetX, 0);
 	targetY = std::max(targetY, 0);
 
-
 	int vecX = targetX - blinkyPos.x;
 	int vecY = targetY - blinkyPos.y;
 
@@ -101,19 +193,13 @@ sf::Vector2u Ghost::calcInkyTarget(sf::Vector2u pacmanPos, sf::Vector2u blinkyPo
 	int finalY = blinkyPos.y + 2 * vecY;
 
 	return {
-		static_cast<unsigned>(targetX), 
-		static_cast<unsigned>(targetY)};
+		static_cast<unsigned>(finalX),
+		static_cast<unsigned>(finalY)};
 }
 
 
 sf::Vector2u Ghost::calcClydeTarget(sf::Vector2u pacmanPos, MoveDirection pacmanDir) {
 	sf::Vector2u target;
-
-	auto calcDistance = [](sf::Vector2u pos1, sf::Vector2u pos2) {
-		int dx = static_cast<int>(pos2.x) - static_cast<int>(pos1.x);
-		int dy = static_cast<int>(pos2.y) - static_cast<int>(pos1.y);
-		return std::sqrt(dx * dx + dy * dy);
-	};
 
 	if (calcDistance(pacmanPos, map.posToGrid(ghost.getPosition())) > 8) {
 		target = pacmanPos;
@@ -125,7 +211,7 @@ sf::Vector2u Ghost::calcClydeTarget(sf::Vector2u pacmanPos, MoveDirection pacman
 }
 
 
-sf::Vector2u Ghost::calcTarget(sf::Vector2u pacmanPos, sf::Vector2u blinkyPos, MoveDirection pacmanDir) {
+sf::Vector2u Ghost::updateTarget(sf::Vector2u pacmanPos, sf::Vector2u blinkyPos, MoveDirection pacmanDir) {
 	sf::Vector2u target;
 	switch (ghostType) {
 		case GhostType::Blinky: {
@@ -155,4 +241,4 @@ sf::Vector2u Ghost::calcTarget(sf::Vector2u pacmanPos, sf::Vector2u blinkyPos, M
 
 sf::Vector2u Ghost::getCurPos() {
 	return map.posToGrid(ghost.getPosition());
-}
+}	
