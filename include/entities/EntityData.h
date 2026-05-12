@@ -1,5 +1,6 @@
 #pragma once
 #include <string>
+#include "SFML/Graphics.hpp"
 
 enum class MoveDirection {
 	Up,
@@ -9,22 +10,9 @@ enum class MoveDirection {
 	None
 };
 
-MoveDirection calcReverseDir(MoveDirection cur) {
-	switch (cur) {
-		case MoveDirection::Up: {
-			return MoveDirection::Down;
-		}
-		case MoveDirection::Down: {
-			return MoveDirection::Up;
-		}
-		case MoveDirection::Right: {
-			return MoveDirection::Left;
-		}
-		case MoveDirection::Left: {
-			return MoveDirection::Down;
-		}
-	}
-}
+MoveDirection calcReverseDir(MoveDirection dir);
+sf::Vector2i dirToVector(MoveDirection dir);
+std::string mapDirection(MoveDirection dir);
 
 enum class GhostType {
 	Blinky,

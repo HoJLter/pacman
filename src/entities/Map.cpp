@@ -77,29 +77,6 @@ void Map::render(sf::RenderWindow& window) {
 	}
 }
 
-bool Map::isFreeDirection(sf::Vector2u pos, MoveDirection dir) {
-	sf::Vector2u checkingPos;
-	switch (dir) {
-		case MoveDirection::Up: {
-			checkingPos = { pos.x, pos.y - 1};
-			break;
-		}
-		case MoveDirection::Down: {
-			checkingPos = { pos.x, pos.y + 1};
-			break;
-		}
-		case MoveDirection::Left: {
-			checkingPos = { pos.x - 1, pos.y };
-			break;
-		}
-		case MoveDirection::Right: {
-			checkingPos = { pos.x + 1, pos.y };
-			break;
-		}
-	}
-	return isFree(checkingPos);
-}
-
 sf::IntRect Map::calcWallType(int i, int j, tile tiletype) {
 	switch (tiletype) {
 	case tile::Wall: {
@@ -244,6 +221,29 @@ bool Map::isFree(sf::Vector2u pos) {
 		tilemap[pos.y][pos.x] != tile::Wall &&
 		tilemap[pos.y][pos.x] != tile::Border;
 };
+
+bool Map::isFreeDirection(sf::Vector2u pos, MoveDirection dir) {
+	sf::Vector2u checkingPos;
+	switch (dir) {
+	case MoveDirection::Up: {
+		checkingPos = { pos.x, pos.y - 1 };
+		break;
+	}
+	case MoveDirection::Down: {
+		checkingPos = { pos.x, pos.y + 1 };
+		break;
+	}
+	case MoveDirection::Left: {
+		checkingPos = { pos.x - 1, pos.y };
+		break;
+	}
+	case MoveDirection::Right: {
+		checkingPos = { pos.x + 1, pos.y };
+		break;
+	}
+	}
+	return isFree(checkingPos);
+}
 
 bool Map::isMoney(sf::Vector2u pos) {
 	return pos.y < tilemap.size() &&

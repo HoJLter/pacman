@@ -41,9 +41,9 @@ private:
 
 	MoveDirection curDirection;
 	MoveDirection chooseNextDirection(sf::Vector2u target);
+	bool isOnCenter();
 	bool isOnCross();
-	void moveTo(sf::Vector2u target, float dt);
-	bool isCenteredOnTile();
+	void move(float dt);
 public:
 	Ghost::Ghost(GameContext& context, IMap& map, GhostType type, sf::Vector2u initPos, float scale);
 

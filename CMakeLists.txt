@@ -12,7 +12,7 @@ file(GLOB_RECURSE SOURCES
     include/*.h
 )
 
-add_executable(app ${SOURCES} "include/engine/core/Algorithms.h" "src/engine/core/Algorithms.cpp")
+add_executable(app ${SOURCES} "include/engine/core/Algorithms.h" "src/engine/core/Algorithms.cpp" "src/entities/GhostTargets.cpp")
 
 ######
 #target_compile_options(app PRIVATE /fsanitize=address)
