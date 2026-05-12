@@ -55,7 +55,7 @@ AssetsManager::AssetsManager() {
 	addTexture("pacmanMove", "assets/game/pacmanMove.png");
 	addTexture("pacmanDie", "assets/game/pacmanDie.png");
 	addTexture("icon", "assets/game/icon.png");
-	addTexture("tilemap", "assets/game/tileMap1.png");
+	addTexture("tilemap", "assets/game/tileMap2.png");
 	addSound("start", "assets/sounds/startSound.mp3");
 	addSound("pickup", "assets/sounds/pickup.mp3");
 
@@ -108,7 +108,7 @@ void AssetsManager::logTilemap() {
 		std::stringstream ss;
 
 		for (int val : row) {
-			ss << std::setw(2) << val; // ширина ячейки
+			ss << std::setw(2) << val;
 		}
 
 		Log::debug(ss.str());

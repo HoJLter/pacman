@@ -10,7 +10,7 @@ Ghost::Ghost(GameContext& context, IMap& map, GhostType type, sf::Vector2u initP
 	map(map),
 	ghostType(type),
 	scale(scale),
-	speedPerSec(10.f),
+	speedPerSec(100.f),
 	ghostMoveTexture(context.assetsManager.getTexture(mapGhostType(type))),
 	ghostMoveAnimation(
 		ghostMoveTexture, // texture
@@ -100,7 +100,7 @@ bool Ghost::isOnCross() {
 		result += map.isFreeDirection(curPosition, dir);
 	}
 	// Log::debug(std::to_string(result > 2) + mapGhostType(ghostType));
-	return result > 2;
+	return result > 2 || result == 1;
 }
 
 MoveDirection Ghost::chooseNextDirection(sf::Vector2u target) {
