@@ -12,7 +12,7 @@ Ghost::Ghost(GameContext& context, IMap& map, GhostType type, sf::Vector2u initP
 	scale(scale),
 	speedPerSec(200.f),
 	ghostMoveTexture(context.assetsManager.getTexture(mapGhostType(type))),
-	ghostMove(
+	ghostMoveAnimation(
 		ghostMoveTexture, // texture
 		2,                 // frames
 		16,                // frameWidth
@@ -21,6 +21,7 @@ Ghost::Ghost(GameContext& context, IMap& map, GhostType type, sf::Vector2u initP
 		0.1f			   // animation speed (in seconds)
 	)
 {
+	curDirection = { 0, -1 };
 	Log::debug(mapGhostType(type) + " has been created. X: " + std::to_string(initPos.x) + " Y: " + std::to_string(initPos.y));
 	ghost.setOrigin(8.f, 8.f);
 	ghost.setTexture(ghostMoveTexture);
@@ -34,52 +35,21 @@ void Ghost::handleEvent(const sf::Event& event) {
 }
 
 void Ghost::update(sf::RenderWindow& window, sf::Vector2u pacmanPos, MoveDirection pacmanDir, sf::Vector2u blinkyPos, float dt) {
-	moveTarget = updateTarget(pacmanPos, blinkyPos, pacmanDir);
-	chooseDirection();
-	ghostMove.update(dt);
-	ghostMove.applyToSprite(ghost);
-
-
-	sf::Vector2f curPosition = ghost.getPosition();
-	sf::Vector2f newPosition = curPosition;
-
-	switch (curDirection) {
-	case MoveDirection::Up:
-		newPosition.y -= speedPerSec * dt;
-		break;
-
-	case MoveDirection::Down:
-		newPosition.y += speedPerSec * dt;
-		break;
-
-	case MoveDirection::Left:
-		newPosition.x -= speedPerSec * dt;
-		break;
-
-	case MoveDirection::Right:
-		newPosition.x += speedPerSec * dt;
-		break;
+	if (curMode == Mode::Scatter &&
+		modeClock.getElapsedTime().asSeconds() > 7.f) {
+		modeClock.restart();
+		curMode = Mode::Chase;
+	}
+	else if (curMode == Mode::Chase &&
+		modeClock.getElapsedTime().asSeconds() > 20.f) {
+		modeClock.restart();
+		curMode = Mode::Scatter;
 	}
 
-
-	float size = 16.0f * scale;
-	float inset = 3.f * scale;
-
-	sf::Vector2f p1 = { newPosition.x - size / 2.f + inset, newPosition.y - size / 2.f + inset };
-	sf::Vector2f p2 = { newPosition.x + size / 2.f - inset, newPosition.y - size / 2.f + inset };
-	sf::Vector2f p3 = { newPosition.x - size / 2.f + inset, newPosition.y + size / 2.f - inset };
-	sf::Vector2f p4 = { newPosition.x + size / 2.f - inset, newPosition.y + size / 2.f - inset };
-
-	sf::Vector2u t1 = map.posToGrid(p1);
-	sf::Vector2u t2 = map.posToGrid(p2);
-	sf::Vector2u t3 = map.posToGrid(p3);
-	sf::Vector2u t4 = map.posToGrid(p4);
-	sf::Vector2u center = map.posToGrid(newPosition);
-
-
-	if (map.isFree(t1) && map.isFree(t2) && map.isFree(t3) && map.isFree(t4)) {
-		ghost.setPosition(newPosition);
-	}
+	
+	sf::Vector2u target = updateTarget(pacmanPos, blinkyPos, pacmanDir);
+	ghostMoveAnimation.update(dt);
+	ghostMoveAnimation.applyToSprite(ghost);
 }
 
 
@@ -88,51 +58,44 @@ void Ghost::render(sf::RenderWindow& window) {
 }
 
 
-void Ghost::chooseDirection() {
+MoveDirection Ghost::chooseNextDirection(sf::Vector2u target) {
 	sf::Vector2u curPosition = map.posToGrid(ghost.getPosition());
 
-	sf::Vector2u top = { curPosition.x, curPosition.y - 1 };
-	sf::Vector2u bottom = { curPosition.x, curPosition.y + 1 };
-	sf::Vector2u left = { curPosition.x - 1, curPosition.y };
-	sf::Vector2u right = { curPosition.x + 1, curPosition.y };
-	std::vector<sf::Vector2u> neighbors = { top, bottom, left, right };
+	sf::Vector2i up = { 0, -1 };
+	sf::Vector2i left = { -1, 0 };
+	sf::Vector2i down = { 0, 1 };
+	sf::Vector2i right = { 1, 0 };
+	
+	std::vector<sf::Vector2i> dirs = { up, left, down, right };
 
-	auto isFree = [&](sf::Vector2u pos) {
-		if (pos.x >= map.getSize().x || pos.y >= map.getSize().y) return false;
-		return (map.getTilemap()[pos.y][pos.x] != tile::Wall &&
-			map.getTilemap()[pos.y][pos.x] != tile::Border);
+	float bestDist = 10000.f;
+	MoveDirection bestDir;
+	for (auto dir : dirs) {
+		sf::Vector2 nextTile = {
+			curPosition.x + dir.x,
+			curPosition.y + dir.y
 		};
+		if (!map.isFree(nextTile) || nextTile == curPosition) {
+			continue;
+		}
+		float distance = calcDistance(nextTile, target);
 
-	sf::Vector2u bestDir = curPosition;
-	float minDistance = std::numeric_limits<float>::max();
+		if (distance < bestDist) {
+			bestDist = distance;
+			if (dir == up) {
+				bestDir = MoveDirection::Up;
+			}
+			else if (dir == down) {
 
-	for (const auto& neighbor : neighbors) {
-		if (isFree(neighbor)) {
-			float curDistance = calcDistance(neighbor, moveTarget);
-			if (curDistance < minDistance) {
-				minDistance = curDistance;
-				bestDir = neighbor;
 			}
 		}
+
 	}
 
-	if (bestDir != curPosition) {
-		if (bestDir.y < curPosition.y) {
-			curDirection = MoveDirection::Up;
-		}
-		else if (bestDir.y > curPosition.y) {
-			curDirection = MoveDirection::Down;
-		}
-		else if (bestDir.x < curPosition.x) {
-			curDirection = MoveDirection::Left;
-		}
-		else if (bestDir.x > curPosition.x) {
-			curDirection = MoveDirection::Right;
-		}
+	if (bestDir == up) {
 
 	}
 }
-
 
 
 // TARGETS
