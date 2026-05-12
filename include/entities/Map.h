@@ -32,7 +32,7 @@ public:
 	bool isFree(sf::Vector2u pos) override;
 	bool isMoney(sf::Vector2u pos) override;
 	bool isTeleport(sf::Vector2u pos) override;
-
+	bool isFreeDirection(sf::Vector2u pos, MoveDirection dir) override;
 
 	void handleEvent(const sf::Event& event);
 	void update(sf::RenderWindow& window, float dt);

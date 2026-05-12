@@ -21,7 +21,7 @@ Ghost::Ghost(GameContext& context, IMap& map, GhostType type, sf::Vector2u initP
 		0.1f			   // animation speed (in seconds)
 	)
 {
-	curDirection = { 0, -1 };
+	curDirection = MoveDirection::None;
 	Log::debug(mapGhostType(type) + " has been created. X: " + std::to_string(initPos.x) + " Y: " + std::to_string(initPos.y));
 	ghost.setOrigin(8.f, 8.f);
 	ghost.setTexture(ghostMoveTexture);
@@ -34,7 +34,12 @@ void Ghost::handleEvent(const sf::Event& event) {
 
 }
 
-void Ghost::update(sf::RenderWindow& window, sf::Vector2u pacmanPos, MoveDirection pacmanDir, sf::Vector2u blinkyPos, float dt) {
+void Ghost::update(sf::RenderWindow& window, 
+	sf::Vector2u pacmanPos, 
+	MoveDirection pacmanDir, 
+	sf::Vector2u blinkyPos, 
+	float dt) 
+{
 	if (curMode == Mode::Scatter &&
 		modeClock.getElapsedTime().asSeconds() > 7.f) {
 		modeClock.restart();
@@ -46,12 +51,23 @@ void Ghost::update(sf::RenderWindow& window, sf::Vector2u pacmanPos, MoveDirecti
 		curMode = Mode::Scatter;
 	}
 
-	
 	sf::Vector2u target = updateTarget(pacmanPos, blinkyPos, pacmanDir);
+	if (isOnCross()) {
+		std::vector<MoveDirection> freeDirs;
+		std::vector<MoveDirection> dirs = {
+			MoveDirection::Down, MoveDirection::Up,
+			MoveDirection::Left, MoveDirection::Right
+		};
+
+		for (auto dir : dirs) {
+			if (map.isFreeDirection(map.posToGrid(ghost.getPosition()), dir)) {
+				freeDirs.push_back(dir);
+			}
+		}
+	}
 	ghostMoveAnimation.update(dt);
 	ghostMoveAnimation.applyToSprite(ghost);
 }
-
 
 void Ghost::render(sf::RenderWindow& window) {
 	window.draw(ghost);
@@ -86,15 +102,17 @@ MoveDirection Ghost::chooseNextDirection(sf::Vector2u target) {
 				bestDir = MoveDirection::Up;
 			}
 			else if (dir == down) {
-
+				bestDir = MoveDirection::Down;
+			}
+			else if (dir == left) {
+				bestDir = MoveDirection::Left;
+			}
+			else if (dir == right) {
+				bestDir = MoveDirection::Right;
 			}
 		}
-
 	}
-
-	if (bestDir == up) {
-
-	}
+	return bestDir;
 }
 
 

@@ -39,8 +39,9 @@ private:
 	sf::Vector2u calcInkyTarget(sf::Vector2u pacmanPos, sf::Vector2u blinkyPos, MoveDirection pacmanDir);
 	sf::Vector2u calcClydeTarget(sf::Vector2u pacmanPos, MoveDirection pacmanDir);
 
-	MoveDirection moveDir;
-	void chooseNextDirection(sf::Vector2u target);
+	MoveDirection curDirection;
+	MoveDirection chooseNextDirection(sf::Vector2u target);
+	bool isOnCross();
 	void moveTo(sf::Vector2u target, float dt);
 	bool isCenteredOnTile();
 public:

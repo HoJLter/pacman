@@ -16,6 +16,7 @@ public:
 	virtual bool isFree(sf::Vector2u pos) = 0;
 	virtual bool isMoney(sf::Vector2u pos) = 0;
 	virtual bool isTeleport(sf::Vector2u pos) = 0;
+	virtual bool isFreeDirection(sf::Vector2u pos, MoveDirection dir) = 0;
 
 	virtual sf::Vector2u getSingleTile(tile spawnTile) = 0;
 };
