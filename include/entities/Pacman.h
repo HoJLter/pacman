@@ -16,6 +16,8 @@ private:
 	sf::Clock animationClock;
 	
 	MoveDirection curDirection;
+	MoveDirection nextDirection;
+
 	float speedPerSec;
 	float scale;
 

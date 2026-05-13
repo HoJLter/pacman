@@ -52,9 +52,16 @@ void Ghost::update(sf::RenderWindow& window,
 	}
 
 	sf::Vector2u target = updateTarget(pacmanPos, blinkyPos, pacmanDir);
-
-	if (isOnCross() && isOnCenter()) {
-		curDirection = chooseNextDirection(target);
+	int freeDirs= getFreeDirsCount();
+	if (isOnCenter()) {
+		MoveDirection nextDirection = chooseNextDirection(target);
+		if ((freeDirs == 2 &&
+			nextDirection != curDirection) ||
+			freeDirs >= 3 ||
+			freeDirs == 1)
+		{
+			curDirection = nextDirection;
+		}
 	}
 	move(dt);
 
@@ -89,7 +96,7 @@ bool Ghost::isOnCenter() {
 		std::abs(distance.y) <= delta.y;
 }
 
-bool Ghost::isOnCross() {
+int Ghost::getFreeDirsCount() {
 	sf::Vector2u curPosition = map.posToGrid(ghost.getPosition());
 	std::vector<MoveDirection> dirs = {
 		MoveDirection::Up, MoveDirection::Left,
@@ -100,7 +107,7 @@ bool Ghost::isOnCross() {
 		result += map.isFreeDirection(curPosition, dir);
 	}
 	// Log::debug(std::to_string(result > 2) + mapGhostType(ghostType));
-	return result > 2 || result == 1;
+	return result;
 }
 
 MoveDirection Ghost::chooseNextDirection(sf::Vector2u target) {

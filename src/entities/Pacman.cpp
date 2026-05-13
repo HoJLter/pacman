@@ -106,9 +106,9 @@ void Pacman::update(sf::RenderWindow& window, float dt) {
 
 	if (map.isTeleport(center)) {
 		sf::Vector2u leftTpPos = { 0, 9 };
-		sf::Vector2u rightTpPos = { 31, 9 };
+		sf::Vector2u rightTpPos = { 32, 9 };
 
-		sf::Vector2u leftTpTarget = { 30, 9 };
+		sf::Vector2u leftTpTarget = { 31, 9 };
 		sf::Vector2u rightTpTarget = { 1, 9 };
 
 		if (center.x == leftTpPos.x &&
