@@ -74,10 +74,20 @@ void Ghost::update(sf::RenderWindow& window,
 		move(dt);
 	}
 
+	ghostMoveAnimation.changeRow(chooseAnimRow());
 	ghostMoveAnimation.update(dt);
 	ghostMoveAnimation.applyToSprite(ghost);
 }
 
+int Ghost::chooseAnimRow() {
+	switch (curDirection) {
+	case MoveDirection::Up:   return 2;
+	case MoveDirection::Down: return 3;
+	case MoveDirection::Left: return 1;
+	case MoveDirection::Right:return 0;
+	}
+	return 3;
+}
 
 void Ghost::render(sf::RenderWindow& window) {
 	window.draw(ghost);

@@ -126,6 +126,22 @@ sf::IntRect Map::calcWallType(int i, int j, tile tiletype) {
 		else if (left && up && !right && !down)
 			return sf::IntRect({ 4 * TS, 1 * TS }, { TS, TS });
 
+		// T up
+		else if (up && !down && left && right)
+			return sf::IntRect({ 5 * TS, 0 * TS }, { TS, TS });
+
+		// T вниз
+		else if (!up && down && left && right)
+			return sf::IntRect({ 5 * TS, 1 * TS }, { TS, TS });
+
+		// T вправо
+		else if (up && down && !left && right)
+			return sf::IntRect({ 6 * TS, 0 * TS }, { TS, TS });
+
+		// T влево
+		else if (up && down && left && !right)
+			return sf::IntRect({ 6 * TS, 1 * TS }, { TS, TS });
+
 		else {
 			return sf::IntRect({ 1 * TS, 1 * TS }, { TS, TS });
 		}

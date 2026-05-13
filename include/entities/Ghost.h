@@ -18,6 +18,7 @@ private:
 	IMap& map;
 	GhostType ghostType;
 
+	int Ghost::chooseAnimRow();
 	sf::Sprite ghost;
 	sf::Texture ghostMoveTexture;
 	Animation ghostMoveAnimation;
