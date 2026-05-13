@@ -128,6 +128,8 @@ sf::Vector2i Ghost::updateTarget(sf::Vector2i pacmanPos, sf::Vector2i blinkyPos,
 	if (logClock.getElapsedTime().asSeconds() > 5.f) {
 		logClock.restart();
 		Log::debug(mapGhostType(ghostType) + "'s target: X: " + std::to_string(target.x) + " Y: " + std::to_string(target.y));
+		Log::debug("Pacman's target: X: " + std::to_string(pacmanPos.x) + " Y: " + std::to_string(pacmanPos.y));
+
 	}
 	return target;
 }

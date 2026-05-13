@@ -55,7 +55,6 @@ void Pacman::update(sf::RenderWindow& window, float dt) {
 	sf::Vector2i gridPos = map.posToGrid(curPosition);
 
 	pacmanMove.changeRow(chooseAnimRow());
-
 	if (map.isOnCenter(curPosition)) {
 		if (map.isFreeDirection(gridPos, nextDirection)) {
 			curDirection = nextDirection;

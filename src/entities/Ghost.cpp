@@ -58,15 +58,17 @@ void Ghost::update(sf::RenderWindow& window,
 	}
 
 	sf::Vector2i target = updateTarget(pacmanPos, blinkyPos, pacmanDir);
-	int freeDirs= getFreeDirsCount();
+	std::vector<MoveDirection> possibleDirs = calcPossibleDirs();
+
 	if (map.isOnCenter(ghost.getPosition())) {
-		MoveDirection nextDirection = chooseNextDirection(target);
-		if ((freeDirs == 2 &&
-			nextDirection != curDirection) ||
-			freeDirs >= 3 ||
-			freeDirs == 1)
-		{
-			curDirection = nextDirection;
+		if (possibleDirs.empty()) {
+			curDirection = calcReverseDir(curDirection);
+		}
+		else if (possibleDirs.size() == 1) {
+			curDirection = possibleDirs[0];
+		}
+		else {
+			curDirection = chooseNextDirection(target, possibleDirs);
 		}
 	}
 
@@ -129,32 +131,40 @@ void Ghost::move(float dt) {
 	});
 }
 
-int Ghost::getFreeDirsCount() {
-	sf::Vector2i curPosition = map.posToGrid(ghost.getPosition());
-	std::vector<MoveDirection> dirs = {
-		MoveDirection::Up, MoveDirection::Left,
-		MoveDirection::Down, MoveDirection::Right
-	};
-	int result = 0;
-	for (auto dir : dirs) {
-		result += map.isFreeDirection(curPosition, dir);
-	}
-	// Log::debug(std::to_string(result > 2) + mapGhostType(ghostType));
-	return result;
+std::vector<MoveDirection> Ghost::calcPossibleDirs() {
+	sf::Vector2i gridPos = map.posToGrid(ghost.getPosition());
+
+	bool canUp = map.isFreeDirection(gridPos, MoveDirection::Up);
+	bool canDown = map.isFreeDirection(gridPos, MoveDirection::Down);
+	bool canLeft = map.isFreeDirection(gridPos, MoveDirection::Left);
+	bool canRight = map.isFreeDirection(gridPos, MoveDirection::Right);
+
+	MoveDirection reverseDir = calcReverseDir(curDirection);
+
+	std::vector<MoveDirection> possibleDirs;
+	if (canUp && reverseDir != MoveDirection::Up)
+		possibleDirs.push_back(MoveDirection::Up);
+
+	if (canDown && reverseDir != MoveDirection::Down)
+		possibleDirs.push_back(MoveDirection::Down);
+
+	if (canLeft && reverseDir != MoveDirection::Left)
+		possibleDirs.push_back(MoveDirection::Left);
+
+	if (canRight && reverseDir != MoveDirection::Right)
+		possibleDirs.push_back(MoveDirection::Right);
+
+	return possibleDirs;
 }
 
-MoveDirection Ghost::chooseNextDirection(sf::Vector2i target) {
+MoveDirection Ghost::chooseNextDirection(sf::Vector2i target, 
+	const std::vector<MoveDirection>& possibleDirs) {
 	sf::Vector2i curPosition = map.posToGrid(ghost.getPosition());
-	
-	std::vector<MoveDirection> dirs = { 
-		MoveDirection::Up, MoveDirection::Left,
-		MoveDirection::Down, MoveDirection::Right 
-	};
 	
 	float minDistance = 10000.f;
 	MoveDirection bestDirection = MoveDirection::None;
 
-	for (auto dir : dirs) {
+	for (auto dir : possibleDirs) {
 		sf::Vector2i dirVector = dirToVector(dir);
 		sf::Vector2i nextTile = {
 			curPosition.x + dirVector.x,

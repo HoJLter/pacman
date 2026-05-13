@@ -43,8 +43,8 @@ private:
 	void wakeUp();
 
 	MoveDirection curDirection;
-	MoveDirection chooseNextDirection(sf::Vector2i target);
-	int getFreeDirsCount();
+	MoveDirection chooseNextDirection(sf::Vector2i target, const std::vector<MoveDirection>& possibleDirs);
+	std::vector<MoveDirection> calcPossibleDirs();
 	void move(float dt);
 public:
 	Ghost::Ghost(GameContext& context, IMap& map, GhostType type, sf::Vector2i initPos, float scale);
