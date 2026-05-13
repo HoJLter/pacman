@@ -81,19 +81,39 @@ sf::Vector2u Ghost::updateTarget(sf::Vector2u pacmanPos, sf::Vector2u blinkyPos,
 	sf::Vector2u target;
 	switch (ghostType) {
 	case GhostType::Blinky: {
-		target = calcBlinkyTarget(pacmanPos, pacmanDir);
+		if (curMode == Mode::Scatter) {
+			target = {1, 1};
+		}
+		else {
+			target = calcBlinkyTarget(pacmanPos, pacmanDir);
+		}
 		break;
 	}
 	case GhostType::Pinky: {
-		target = calcPinkyTarget(pacmanPos, pacmanDir);
+		if (curMode == Mode::Scatter) {
+			target = { 31, 1 };
+		}
+		else {
+			target = calcPinkyTarget(pacmanPos, pacmanDir);
+		}
 		break;
 	}
 	case GhostType::Inky: {
-		target = calcInkyTarget(pacmanPos, blinkyPos, pacmanDir);
+		if (curMode == Mode::Scatter) {
+			target = { 1, 16 };
+		}
+		else {
+			target = calcInkyTarget(pacmanPos, blinkyPos, pacmanDir);
+		}
 		break;
 	}
 	case GhostType::Clyde: {
-		target = calcClydeTarget(pacmanPos, pacmanDir);
+		if (curMode == Mode::Scatter) {
+			target = { 31, 16 };
+		}
+		else {
+			target = calcClydeTarget(pacmanPos, pacmanDir);
+		}
 		break;
 	}
 	}

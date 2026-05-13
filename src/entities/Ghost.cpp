@@ -22,6 +22,7 @@ Ghost::Ghost(GameContext& context, IMap& map, GhostType type, sf::Vector2u initP
 	)
 {
 	curDirection = MoveDirection::None;
+	curMode = Mode::Scatter;
 	//Log::debug(mapGhostType(type) + " has been created. X: " + std::to_string(initPos.x) + " Y: " + std::to_string(initPos.y));
 	ghost.setOrigin(8.f, 8.f);
 	ghost.setTexture(ghostMoveTexture);
@@ -44,11 +45,13 @@ void Ghost::update(sf::RenderWindow& window,
 		modeClock.getElapsedTime().asSeconds() > 7.f) {
 		modeClock.restart();
 		curMode = Mode::Chase;
+		Log::debug("CurMode = Chase");
 	}
 	else if (curMode == Mode::Chase &&
 		modeClock.getElapsedTime().asSeconds() > 20.f) {
 		modeClock.restart();
 		curMode = Mode::Scatter;
+		Log::debug("CurMode = Scatter");
 	}
 
 	sf::Vector2u target = updateTarget(pacmanPos, blinkyPos, pacmanDir);
@@ -88,8 +91,6 @@ bool Ghost::isOnCenter() {
 	sf::Vector2f delta = { 4.f, 4.f };
 	
 	sf::Vector2f distance = curPosition - tileCenter;
-	Log::debug(std::to_string(std::abs(distance.x) <= delta.x &&
-		std::abs(distance.y) <= delta.y) + mapGhostType(ghostType));
 
 	return 
 		std::abs(distance.x) <= delta.x &&
@@ -137,7 +138,6 @@ MoveDirection Ghost::chooseNextDirection(sf::Vector2u target) {
 			bestDirection = dir;
 		}
 	}
-	Log::debug(mapGhostType(ghostType) + ": " + mapDirection(curDirection));
 	return bestDirection;
 }
 
