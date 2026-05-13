@@ -81,6 +81,10 @@ void Pacman::update(sf::RenderWindow& window, float dt) {
 		Log::debug("Event CoinCollected has been pushed");
 	};
 
+	if (map.isEnergizer(center)) {
+		context.eventQueue.push(GameEvent{ EventType::EnergizerCollected, {center.x, center.y} });
+	};
+
 	if (map.isTeleport(center)) {
 		sf::Vector2i leftTpPos = { 0, 9 };
 		sf::Vector2i rightTpPos = { 32, 9 };

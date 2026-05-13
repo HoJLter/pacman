@@ -18,7 +18,8 @@ enum class GhostType {
 	Blinky,
 	Pinky,
 	Inky,
-	Clyde
+	Clyde,
+	None
 };
 
 std::string mapGhostType(GhostType type);

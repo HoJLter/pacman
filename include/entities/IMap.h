@@ -15,6 +15,7 @@ public:
 
 	virtual bool isFree(sf::Vector2i pos) = 0;
 	virtual bool isMoney(sf::Vector2i pos) = 0;
+	virtual bool isEnergizer(sf::Vector2i pos) = 0;
 	virtual bool isTeleport(sf::Vector2i pos) = 0;
 	virtual bool isFreeDirection(sf::Vector2i pos, MoveDirection dir) = 0;
 	virtual bool isInHouse(sf::Vector2i pos) = 0;

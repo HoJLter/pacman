@@ -87,7 +87,7 @@ sf::Vector2i Ghost::updateTarget(sf::Vector2i pacmanPos, sf::Vector2i blinkyPos,
 	else {
 		switch (ghostType) {
 			case GhostType::Blinky: {
-				if (curMode == Mode::Scatter) {
+				if (curMode == Mode::Scatter || isInFear) {
 					target = {1, 1};
 				}
 				else {
@@ -96,7 +96,7 @@ sf::Vector2i Ghost::updateTarget(sf::Vector2i pacmanPos, sf::Vector2i blinkyPos,
 				break;
 			}
 			case GhostType::Pinky: {
-				if (curMode == Mode::Scatter) {
+				if (curMode == Mode::Scatter || isInFear) {
 					target = { 31, 1 };
 				}
 				else {
@@ -105,7 +105,7 @@ sf::Vector2i Ghost::updateTarget(sf::Vector2i pacmanPos, sf::Vector2i blinkyPos,
 				break;
 			}
 			case GhostType::Inky: {
-				if (curMode == Mode::Scatter) {
+				if (curMode == Mode::Scatter || isInFear) {
 					target = { 1, 16 };
 				}
 				else {
@@ -114,7 +114,7 @@ sf::Vector2i Ghost::updateTarget(sf::Vector2i pacmanPos, sf::Vector2i blinkyPos,
 				break;
 			}
 			case GhostType::Clyde: {
-				if (curMode == Mode::Scatter) {
+				if (curMode == Mode::Scatter || isInFear) {
 					target = { 31, 16 };
 				}
 				else {

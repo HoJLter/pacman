@@ -6,7 +6,8 @@
 
 
 enum class EventType {
-	CoinCollected
+	CoinCollected,
+	EnergizerCollected
 };
 
 struct GameEvent {

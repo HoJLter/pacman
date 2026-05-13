@@ -44,6 +44,9 @@ AssetsManager::AssetsManager() {
 
 	//addTexture("bonuses", "assets/game/maze/bonuses.png");
 	addTexture("gates", "assets/game/maze/gates.png");
+	addTexture("fear", "assets/game/ghosts/fear.png");
+	addTexture("energizer", "assets/game/energizer.png");
+
 	addTexture("border", "assets/game/maze/border.png");
 	addTexture("void", "assets/game/maze/void.png");
 	addTexture("maze", "assets/game/maze/maze.png");
@@ -139,6 +142,7 @@ void AssetsManager::calcTilemap() {
 	sf::Color clydeSpawnColor = sf::Color(255, 122, 33);
 
 	sf::Color pacmanSpawnColor = sf::Color(255, 204, 0);
+	sf::Color energizerColor = sf::Color(255, 192, 33);
 
 	for (int y = 0; y < mapHeight; y++) {
 		for (int x = 0; x < mapWidth; x++) {
@@ -173,6 +177,9 @@ void AssetsManager::calcTilemap() {
 			}
 			else if (pixelColor == gatesColor) {
 				tilemap[y][x] = tile::Gates;
+			}
+			else if (pixelColor == energizerColor) {
+				tilemap[y][x] = tile::Enegrizer;
 			}
 			else {
 				tilemap[y][x] = tile::Void;

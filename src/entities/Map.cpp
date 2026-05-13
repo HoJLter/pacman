@@ -36,6 +36,9 @@ Map::Map(GameContext& context, float scale) :
 			else if (tilemap[y][x] == tile::Gates) {
 				sprite.setTexture(context.assetsManager.getTexture("gates"));
 			}
+			else if (tilemap[y][x] == tile::Enegrizer) {
+				sprite.setTexture(context.assetsManager.getTexture("energizer"));
+			}
 
 			sprite.setPosition(x * TS, y * TS);
 
@@ -54,9 +57,13 @@ void Map::update(sf::RenderWindow& window, float dt) {
 	if (!context.eventQueue.empty()) {
 		GameEvent event = context.eventQueue.front();
 		if (event.type == EventType::CoinCollected) {
-			Log::debug("Event CoinCollected has been catcherd");
 			context.assetsManager.playSound("pickup");
 			context.eventQueue.pop();
+			tilemap[event.tilePos.y][event.tilePos.x] = tile::Void;
+			sprites[event.tilePos.y][event.tilePos.x].setTexture(context.assetsManager.getTexture("void"));
+		}
+
+		if (event.type == EventType::EnergizerCollected) {
 			tilemap[event.tilePos.y][event.tilePos.x] = tile::Void;
 			sprites[event.tilePos.y][event.tilePos.x].setTexture(context.assetsManager.getTexture("void"));
 		}
@@ -257,6 +264,7 @@ bool Map::isFree(sf::Vector2i pos) {
 		tilemap[pos.y][pos.x] != tile::Border;
 };
 
+
 bool Map::isFreeDirection(sf::Vector2i pos, MoveDirection dir) {
 	sf::Vector2i checkingPos;
 	switch (dir) {
@@ -285,6 +293,12 @@ bool Map::isMoney(sf::Vector2i pos) {
 		pos.x < tilemap[0].size() &&
 		tilemap[pos.y][pos.x] == tile::Money;
 };
+
+bool Map::isEnergizer(sf::Vector2i pos) {
+	return pos.y < tilemap.size() &&
+		pos.x < tilemap[0].size() &&
+		tilemap[pos.y][pos.x] == tile::Enegrizer;
+}
 
 bool Map::isTeleport(sf::Vector2i pos) {
 	return pos.y < tilemap.size() &&

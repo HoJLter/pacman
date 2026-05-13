@@ -42,6 +42,9 @@ private:
 	bool isSleeping;
 	void wakeUp();
 
+	sf::Clock fearClock;
+	bool isInFear;
+
 	MoveDirection curDirection;
 	MoveDirection chooseNextDirection(sf::Vector2i target, const std::vector<MoveDirection>& possibleDirs);
 	std::vector<MoveDirection> calcPossibleDirs();
@@ -50,6 +53,11 @@ public:
 	Ghost::Ghost(GameContext& context, IMap& map, GhostType type, sf::Vector2i initPos, float scale);
 
 	sf::Vector2i getCurPos();
+	void scare();
+	void unScare();
+
+	bool isScared() { return isInFear; };
+	void returnToHouse();
 
 	void handleEvent(const sf::Event& event);
 	void update(sf::RenderWindow& window, sf::Vector2i pacmanPos, MoveDirection pacmanDir, sf::Vector2i blinkyPos, float dt);

@@ -31,6 +31,7 @@ public:
 
 	bool isFree(sf::Vector2i pos) override;
 	bool isMoney(sf::Vector2i pos) override;
+	bool isEnergizer(sf::Vector2i pos) override;
 	bool isTeleport(sf::Vector2i pos) override;
 	bool isFreeDirection(sf::Vector2i pos, MoveDirection dir) override;
 	bool isInHouse(sf::Vector2i pos) override;

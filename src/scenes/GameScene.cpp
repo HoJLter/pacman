@@ -66,11 +66,32 @@ void GameScene::handleEvent(const sf::Event& event) {
 
 
 void GameScene::update(float dt) {
+	if (!context.eventQueue.empty()) {
+		GameEvent event = context.eventQueue.front();
+		if (event.type == EventType::EnergizerCollected) {
+			Log::debug("Energizer pickup event");
+			context.eventQueue.pop();
+			blinky.scare();
+			pinky.scare();
+			inky.scare();
+			clyde.scare();
+		}
+	}
+
+
+
 	if (!isGameOver) {
-		if (checkLoose()) {
-			isGameOver = true;
-			resultScoreLabel.setString("Your score: " + std::to_string(context.data.score));
-			context.data.score = 0;
+		auto collisionGhost = checkGhostCollision();
+		if (collisionGhost.has_value()) {
+			if (collisionGhost.value().get().isScared()) {
+				context.data.score += 200;
+				collisionGhost.value().get().returnToHouse();
+			}
+			else {
+				isGameOver = true;
+				resultScoreLabel.setString("Your score: " + std::to_string(context.data.score));
+				context.data.score = 0;
+			}
 		}
 		pacman.update(context.window, dt);
 		map.update(context.window, dt);
@@ -107,10 +128,21 @@ void GameScene::render() {
 	}
 }
 
-bool GameScene::checkLoose() {
-	return 0;
-	return (pacman.getCurPos() == blinky.getCurPos() ||
-			pacman.getCurPos() == pinky.getCurPos() ||
-			pacman.getCurPos() == inky.getCurPos() ||
-			pacman.getCurPos() == clyde.getCurPos());
+std::optional<std::reference_wrapper<Ghost>> GameScene::checkGhostCollision() {
+	sf::Vector2i pacmanPos = pacman.getCurPos();
+
+	if (pacmanPos == blinky.getCurPos())
+		return blinky;
+
+	if (pacmanPos == pinky.getCurPos())
+		return pinky;
+
+	if (pacmanPos == inky.getCurPos())
+		return inky;
+
+	if (pacmanPos == clyde.getCurPos())
+		return clyde;
+
+
+	return std::nullopt;
 }

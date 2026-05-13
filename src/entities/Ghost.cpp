@@ -6,6 +6,7 @@
 
 
 Ghost::Ghost(GameContext& context, IMap& map, GhostType type, sf::Vector2i initPos, float scale):
+	isInFear(false),
 	context(context),
 	map(map),
 	ghostType(type),
@@ -76,7 +77,15 @@ void Ghost::update(sf::RenderWindow& window,
 		move(dt);
 	}
 
-	ghostMoveAnimation.changeRow(chooseAnimRow());
+	if (!isInFear) {
+		ghostMoveAnimation.changeRow(chooseAnimRow());
+	}
+	else {
+		ghostMoveAnimation.changeRow(0);
+		if (fearClock.getElapsedTime().asSeconds() > 7.f) {
+			unScare();
+		}
+	}
 	ghostMoveAnimation.update(dt);
 	ghostMoveAnimation.applyToSprite(ghost);
 }
@@ -95,6 +104,12 @@ void Ghost::render(sf::RenderWindow& window) {
 	window.draw(ghost);
 }
 
+void Ghost::returnToHouse() {
+	ghost.setPosition(map.gridToPos(map.getSingleTile(tile::PinkySpawn)));
+	unScare();
+	isSleeping = true;
+	sleepClock.restart();
+}
 
 void Ghost::wakeUp() {
 	switch (ghostType) {
@@ -183,3 +198,20 @@ MoveDirection Ghost::chooseNextDirection(sf::Vector2i target,
 	return bestDirection;
 }
 
+
+void Ghost::scare() {
+	if (!isInFear) {
+		isInFear = true;
+		ghost.setTexture(context.assetsManager.getTexture("fear"));
+		ghostMoveAnimation.applyToSprite(ghost);
+	}
+	fearClock.restart();
+}
+
+void Ghost::unScare() {
+	if (isInFear) {
+		isInFear = false;
+		ghost.setTexture(context.assetsManager.getTexture(mapGhostType(ghostType)));
+		ghostMoveAnimation.applyToSprite(ghost);
+	}
+}

@@ -23,7 +23,7 @@ private:
 	Label pressEnterLabel;
 	Label resultScoreLabel;
 
-	bool checkLoose();
+	std::optional<std::reference_wrapper<Ghost>> checkGhostCollision();
 	bool isGameOver;
 public:
 	GameScene(GameContext& context, ISceneSwitcher& ss);
