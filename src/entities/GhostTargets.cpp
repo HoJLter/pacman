@@ -79,43 +79,50 @@ sf::Vector2i Ghost::calcClydeTarget(sf::Vector2i pacmanPos, MoveDirection pacman
 
 sf::Vector2i Ghost::updateTarget(sf::Vector2i pacmanPos, sf::Vector2i blinkyPos, MoveDirection pacmanDir) {
 	sf::Vector2i target;
-	switch (ghostType) {
-	case GhostType::Blinky: {
-		if (curMode == Mode::Scatter) {
-			target = {1, 1};
-		}
-		else {
-			target = calcBlinkyTarget(pacmanPos, pacmanDir);
-		}
-		break;
+
+	if (map.isInHouse(map.posToGrid(ghost.getPosition()))) {
+		sf::Vector2i gates = map.getSingleTile(tile::Gates);
+		target = {gates.x, gates.y-1};
 	}
-	case GhostType::Pinky: {
-		if (curMode == Mode::Scatter) {
-			target = { 31, 1 };
+	else {
+		switch (ghostType) {
+			case GhostType::Blinky: {
+				if (curMode == Mode::Scatter) {
+					target = {1, 1};
+				}
+				else {
+					target = calcBlinkyTarget(pacmanPos, pacmanDir);
+				}
+				break;
+			}
+			case GhostType::Pinky: {
+				if (curMode == Mode::Scatter) {
+					target = { 31, 1 };
+				}
+				else {
+					target = calcPinkyTarget(pacmanPos, pacmanDir);
+				}
+				break;
+			}
+			case GhostType::Inky: {
+				if (curMode == Mode::Scatter) {
+					target = { 1, 16 };
+				}
+				else {
+					target = calcInkyTarget(pacmanPos, blinkyPos, pacmanDir);
+				}
+				break;
+			}
+			case GhostType::Clyde: {
+				if (curMode == Mode::Scatter) {
+					target = { 31, 16 };
+				}
+				else {
+					target = calcClydeTarget(pacmanPos, pacmanDir);
+				}
+				break;
+			}
 		}
-		else {
-			target = calcPinkyTarget(pacmanPos, pacmanDir);
-		}
-		break;
-	}
-	case GhostType::Inky: {
-		if (curMode == Mode::Scatter) {
-			target = { 1, 16 };
-		}
-		else {
-			target = calcInkyTarget(pacmanPos, blinkyPos, pacmanDir);
-		}
-		break;
-	}
-	case GhostType::Clyde: {
-		if (curMode == Mode::Scatter) {
-			target = { 31, 16 };
-		}
-		else {
-			target = calcClydeTarget(pacmanPos, pacmanDir);
-		}
-		break;
-	}
 	}
 
 	if (logClock.getElapsedTime().asSeconds() > 5.f) {

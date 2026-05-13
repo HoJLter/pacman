@@ -214,6 +214,14 @@ sf::Vector2f Map::gridToPos(sf::Vector2i pos) {
 	return sqrNum;
 }
 
+bool Map::isInHouse(sf::Vector2i pos) {
+	return pos.y < tilemap.size() &&
+		pos.x < tilemap[0].size() &&
+		(tilemap[pos.y][pos.x] == tile::ClydeSpawn ||
+		tilemap[pos.y][pos.x] == tile::PinkySpawn||
+		tilemap[pos.y][pos.x] == tile::InkySpawn ||
+		tilemap[pos.y][pos.x] == tile::Gates);
+}
 
 bool Map::isFree(sf::Vector2i pos) {
 	return pos.y < tilemap.size() &&

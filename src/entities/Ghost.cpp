@@ -41,6 +41,9 @@ void Ghost::update(sf::RenderWindow& window,
 	sf::Vector2i blinkyPos, 
 	float dt) 
 {
+	if (isSleeping) {
+		wakeUp();
+	}
 	if (curMode == Mode::Scatter &&
 		modeClock.getElapsedTime().asSeconds() > 7.f) {
 		modeClock.restart();
@@ -66,7 +69,10 @@ void Ghost::update(sf::RenderWindow& window,
 			curDirection = nextDirection;
 		}
 	}
-	move(dt);
+
+	if (!isSleeping) {
+		move(dt);
+	}
 
 	ghostMoveAnimation.update(dt);
 	ghostMoveAnimation.applyToSprite(ghost);
@@ -75,6 +81,34 @@ void Ghost::update(sf::RenderWindow& window,
 
 void Ghost::render(sf::RenderWindow& window) {
 	window.draw(ghost);
+}
+
+
+void Ghost::wakeUp() {
+	switch (ghostType) {
+		case GhostType::Blinky: {
+			isSleeping = false;
+			break;
+		}
+		case GhostType::Pinky: {
+			if (sleepClock.getElapsedTime().asSeconds() > 5.f) {
+				isSleeping = false;
+			}
+			break;
+		}
+		case GhostType::Inky: {
+			if (sleepClock.getElapsedTime().asSeconds() > 10.f) {
+				isSleeping = false;
+			}
+			break;
+		}
+		case GhostType::Clyde: {
+			if (sleepClock.getElapsedTime().asSeconds() > 20.f) {
+				isSleeping = false;
+			}
+			break;
+		}
+	}
 }
 
 void Ghost::move(float dt) {

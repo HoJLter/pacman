@@ -25,12 +25,10 @@ private:
 
 	float speedPerSec;
 	float scale;
-	bool isFreezed;
 
 	Mode curMode;
 	sf::Clock modeClock;
 
-	sf::Clock freezeClock;
 	sf::Clock logClock;
 
 	sf::Vector2i updateTarget(sf::Vector2i pacmanPos, sf::Vector2i blinkyPos, MoveDirection pacmanDir);
@@ -38,6 +36,10 @@ private:
 	sf::Vector2i calcPinkyTarget(sf::Vector2i pacmanPos, MoveDirection pacmanDir);
 	sf::Vector2i calcInkyTarget(sf::Vector2i pacmanPos, sf::Vector2i blinkyPos, MoveDirection pacmanDir);
 	sf::Vector2i calcClydeTarget(sf::Vector2i pacmanPos, MoveDirection pacmanDir);
+
+	sf::Clock sleepClock;
+	bool isSleeping;
+	void wakeUp();
 
 	MoveDirection curDirection;
 	MoveDirection chooseNextDirection(sf::Vector2i target);
