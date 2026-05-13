@@ -12,8 +12,17 @@ GameScene::GameScene(GameContext& context, ISceneSwitcher& ss) :
 	clyde(context, map, GhostType::Clyde, map.getSingleTile(tile::ClydeSpawn), scale),
 	score("Score: ", { 100.f, 20.f }, 16, sf::Color::Yellow, context.assetsManager),
 	isGameOver(false),
+	isWin(false),
 	gameOverLabel(
 		"GAME OVER",
+		{ context.settings.viewWidth / 2.f,
+		context.settings.viewHeight / 2 - 300.f },
+		100,
+		sf::Color::Yellow,
+		context.assetsManager
+	),
+	winLabel(
+		"CONGATULATIONS!",
 		{ context.settings.viewWidth / 2.f,
 		context.settings.viewHeight / 2 - 300.f },
 		100,
@@ -66,6 +75,13 @@ void GameScene::handleEvent(const sf::Event& event) {
 
 
 void GameScene::update(float dt) {
+	if (context.data.lastMoney <= 0) {
+		resultScoreLabel.setString("Your score: " + std::to_string(context.data.score));
+		context.data.lastMoney++;
+		isWin = true;
+		isGameOver = true;
+	}
+
 	if (!context.eventQueue.empty()) {
 		GameEvent event = context.eventQueue.front();
 		context.eventQueue.pop();
@@ -122,7 +138,12 @@ void GameScene::render() {
 		score.render(context.window);
 	}
 	else {
-		gameOverLabel.render(context.window);
+		if (isWin) {
+			winLabel.render(context.window);
+		}
+		else {
+			gameOverLabel.render(context.window);
+		}
 		resultScoreLabel.render(context.window);
 		pressEnterLabel.render(context.window);
 	}

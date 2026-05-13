@@ -20,11 +20,13 @@ private:
 
 	Label score;
 	Label gameOverLabel;
+	Label winLabel;
 	Label pressEnterLabel;
 	Label resultScoreLabel;
 
 	std::optional<std::reference_wrapper<Ghost>> checkGhostCollision();
 	bool isGameOver;
+	bool isWin;
 public:
 	GameScene(GameContext& context, ISceneSwitcher& ss);
 	void handleEvent(const sf::Event& event) override;

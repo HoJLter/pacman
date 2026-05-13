@@ -16,6 +16,9 @@ Map::Map(GameContext& context, float scale) :
 
 	sprites.resize(tilemap.size(), std::vector<sf::Sprite>(tilemap[0].size()));
 
+	context.data.score = 0;
+	int moneyCount = 0;
+
 	for (int y = 0; y < tilemap.size(); y++) {
 		for (int x = 0; x < tilemap[0].size(); x++) {
 
@@ -31,6 +34,7 @@ Map::Map(GameContext& context, float scale) :
 				sprite.setTextureRect(calcWallType(y, x, tile::Border));
 			}
 			else if (tilemap[y][x] == tile::Money) {
+				moneyCount++;
 				sprite.setTexture(context.assetsManager.getTexture("money"));
 			}
 			else if (tilemap[y][x] == tile::Gates) {
@@ -45,6 +49,7 @@ Map::Map(GameContext& context, float scale) :
 			sprites[y][x] = sprite;
 		}
 	}
+	context.data.lastMoney = moneyCount;
 }
 
 void Map::handleEvent(const sf::Event& event) {
@@ -61,6 +66,7 @@ void Map::update(sf::RenderWindow& window, float dt) {
 			context.eventQueue.pop();
 			tilemap[event.tilePos.y][event.tilePos.x] = tile::Void;
 			sprites[event.tilePos.y][event.tilePos.x].setTexture(context.assetsManager.getTexture("void"));
+			context.data.lastMoney--;
 		}
 
 		if (event.type == EventType::EnergizerCollected) {

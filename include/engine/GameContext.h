@@ -17,6 +17,7 @@ struct GameEvent {
 
 struct GameData {
 	int score;
+	int lastMoney;
 };
 
 struct GameContext {

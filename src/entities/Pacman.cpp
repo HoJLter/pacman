@@ -6,7 +6,7 @@ Pacman::Pacman(GameContext& context,IMap& map, sf::Vector2i initPos, float scale
 	context(context),
 	scale(scale),
 	map(map),
-	speedPerSec(350.f),
+	speedPerSec(650.f),
 	pacmanMoveTexture(context.assetsManager.getTexture("pacmanMove")),
 	pacmanMove(
 		pacmanMoveTexture, // texture
