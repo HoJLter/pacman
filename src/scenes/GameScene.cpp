@@ -87,6 +87,7 @@ void GameScene::update(float dt) {
 				collisionGhost.value().get().returnToHouse();
 			}
 			else {
+				context.assetsManager.playSound("pacmanDeath");
 				isGameOver = true;
 				resultScoreLabel.setString("Your score: " + std::to_string(context.data.score));
 				context.data.score = 0;

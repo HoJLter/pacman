@@ -60,8 +60,12 @@ AssetsManager::AssetsManager() {
 	addTexture("tilemap", "assets/game/tileMap2.png");
 
 	addSound("start", "assets/sounds/startSound.mp3");
-	addSound("pickup", "assets/sounds/pickup.mp3");
+	addSound("pickup", "assets/sounds/pickup.wav");
 	addSound("scare", "assets/sounds/scare.mp3");
+	addSound("ghostDeath", "assets/sounds/ghostDeath.wav");
+	addSound("pacmanDeath", "assets/sounds/pacmanDeath.wav");
+
+
 
 
 

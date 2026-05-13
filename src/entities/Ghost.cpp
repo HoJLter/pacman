@@ -83,6 +83,7 @@ void Ghost::update(sf::RenderWindow& window,
 	else {
 		ghostMoveAnimation.changeRow(0);
 		if (fearClock.getElapsedTime().asSeconds() > 7.f) {
+			context.assetsManager.stopLoopedSound("scare");
 			unScare();
 		}
 	}
@@ -126,7 +127,7 @@ void Ghost::returnToHouse() {
 	}
 
 	ghost.setPosition(map.gridToPos(spawnTile));
-
+	context.assetsManager.playSound("ghostDeath");
 	unScare();
 	isSleeping = true;
 	sleepClock.restart();
@@ -239,6 +240,5 @@ void Ghost::unScare() {
 		isInFear = false;
 		ghost.setTexture(context.assetsManager.getTexture(mapGhostType(ghostType)));
 		ghostMoveAnimation.applyToSprite(ghost);
-		context.assetsManager.stopLoopedSound("scare");
 	}
 }
