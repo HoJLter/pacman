@@ -108,6 +108,7 @@ void GameScene::render() {
 }
 
 bool GameScene::checkLoose() {
+	return 0;
 	return (pacman.getCurPos() == blinky.getCurPos() ||
 			pacman.getCurPos() == pinky.getCurPos() ||
 			pacman.getCurPos() == inky.getCurPos() ||

@@ -43,7 +43,6 @@ private:
 
 	MoveDirection curDirection;
 	MoveDirection chooseNextDirection(sf::Vector2i target);
-	bool isOnCenter();
 	int getFreeDirsCount();
 	void move(float dt);
 public:

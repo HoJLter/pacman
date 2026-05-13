@@ -6,7 +6,7 @@ Pacman::Pacman(GameContext& context,IMap& map, sf::Vector2i initPos, float scale
 	context(context),
 	scale(scale),
 	map(map),
-	speedPerSec(150.f),
+	speedPerSec(350.f),
 	pacmanMoveTexture(context.assetsManager.getTexture("pacmanMove")),
 	pacmanMove(
 		pacmanMoveTexture, // texture
@@ -30,73 +30,51 @@ void Pacman::handleEvent(const sf::Event& event) {
 	if (event.type == sf::Event::KeyPressed) {
 		switch (event.key.code) {
 			case sf::Keyboard::Up: {
-				Log::debug("UP BUTTON");
-				pacmanMove.changeRow(2);
-				curDirection = MoveDirection::Up;
+				nextDirection = MoveDirection::Up;
 				break;
 			}
 			case sf::Keyboard::Down: {
-				Log::debug("DOWN BUTTON");
-				pacmanMove.changeRow(3);
-				curDirection = MoveDirection::Down;
+				nextDirection = MoveDirection::Down;
 				break;
 			}
 			case sf::Keyboard::Left: {
-				Log::debug("LEFT BUTTON");
-				pacmanMove.changeRow(1);
-				curDirection = MoveDirection::Left;
+				nextDirection = MoveDirection::Left;				
 				break;
 			}
 			case sf::Keyboard::Right: {
-				Log::debug("RIGHT BUTTON");
-				pacmanMove.changeRow(0);
-				curDirection = MoveDirection::Right;
+				nextDirection = MoveDirection::Right;
 				break;
 			}
 		}
 	}
 }
+
+
 void Pacman::update(sf::RenderWindow& window, float dt) {
 	sf::Vector2f curPosition = pacman.getPosition();
-	sf::Vector2f newPosition = curPosition;
+	sf::Vector2i gridPos = map.posToGrid(curPosition);
 
-	switch (curDirection) {
-	case MoveDirection::Up:
-		newPosition.y -= speedPerSec * dt;
-		break;
+	pacmanMove.changeRow(chooseAnimRow());
 
-	case MoveDirection::Down:
-		newPosition.y += speedPerSec * dt;
-		break;
-
-	case MoveDirection::Left:
-		newPosition.x -= speedPerSec * dt;
-		break;
-
-	case MoveDirection::Right:
-		newPosition.x += speedPerSec * dt;
-		break;
+	if (map.isOnCenter(curPosition)) {
+		if (map.isFreeDirection(gridPos, nextDirection)) {
+			curDirection = nextDirection;
+		}
+		else if (!map.isFreeDirection(gridPos, curDirection)) {
+			curDirection = MoveDirection::None;
+		}
 	}
 
+	if (curDirection != MoveDirection::None) {
+		sf::Vector2i moveVector = dirToVector(curDirection);
 
-	float size = 16.0f * scale;
-	float inset = 3.f * scale; 
-
-	sf::Vector2f p1 = { newPosition.x - size / 2.f + inset, newPosition.y - size / 2.f + inset };
-	sf::Vector2f p2 = { newPosition.x + size / 2.f - inset, newPosition.y - size / 2.f + inset };
-	sf::Vector2f p3 = { newPosition.x - size / 2.f + inset, newPosition.y + size / 2.f - inset };
-	sf::Vector2f p4 = { newPosition.x + size / 2.f - inset, newPosition.y + size / 2.f - inset };
-
-	sf::Vector2i t1 = map.posToGrid(p1);
-	sf::Vector2i t2 = map.posToGrid(p2);
-	sf::Vector2i t3 = map.posToGrid(p3);
-	sf::Vector2i t4 = map.posToGrid(p4);
-	sf::Vector2i center = map.posToGrid(newPosition);
-
-
-	if (map.isFree(t1) && map.isFree(t2) && map.isFree(t3) && map.isFree(t4)) {
-		pacman.setPosition(newPosition);
+		pacman.move({
+			moveVector.x * speedPerSec * dt,
+			moveVector.y * speedPerSec * dt
+			});
 	}
+
+	sf::Vector2i center = gridPos;
 
 	if (map.isMoney(center)) {
 		context.eventQueue.push(GameEvent{ EventType::CoinCollected, {center.x, center.y} });
@@ -134,4 +112,14 @@ void Pacman::render(sf::RenderWindow& window) {
 
 sf::Vector2i Pacman::getCurPos() {
 	return map.posToGrid(pacman.getPosition());
+}
+
+int Pacman::chooseAnimRow() {
+	switch (curDirection) {
+		case MoveDirection::Up:   return 2;
+		case MoveDirection::Down: return 3;
+		case MoveDirection::Left: return 1;
+		case MoveDirection::Right:return 0;
+	}
+	return 3;
 }

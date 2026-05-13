@@ -14,6 +14,7 @@ private:
 	Animation pacmanMove;
 	sf::Texture pacmanMoveTexture;
 	sf::Clock animationClock;
+	int Pacman::chooseAnimRow();
 	
 	MoveDirection curDirection;
 	MoveDirection nextDirection;

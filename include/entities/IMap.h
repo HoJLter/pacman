@@ -18,6 +18,7 @@ public:
 	virtual bool isTeleport(sf::Vector2i pos) = 0;
 	virtual bool isFreeDirection(sf::Vector2i pos, MoveDirection dir) = 0;
 	virtual bool isInHouse(sf::Vector2i pos) = 0;
+	virtual bool isOnCenter(sf::Vector2f pos) = 0;
 
 	virtual sf::Vector2i getSingleTile(tile spawnTile) = 0;
 };

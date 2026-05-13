@@ -10,7 +10,7 @@ Ghost::Ghost(GameContext& context, IMap& map, GhostType type, sf::Vector2i initP
 	map(map),
 	ghostType(type),
 	scale(scale),
-	speedPerSec(100.f),
+	speedPerSec(250.f),
 	ghostMoveTexture(context.assetsManager.getTexture(mapGhostType(type))),
 	ghostMoveAnimation(
 		ghostMoveTexture, // texture
@@ -59,7 +59,7 @@ void Ghost::update(sf::RenderWindow& window,
 
 	sf::Vector2i target = updateTarget(pacmanPos, blinkyPos, pacmanDir);
 	int freeDirs= getFreeDirsCount();
-	if (isOnCenter()) {
+	if (map.isOnCenter(ghost.getPosition())) {
 		MoveDirection nextDirection = chooseNextDirection(target);
 		if ((freeDirs == 2 &&
 			nextDirection != curDirection) ||
@@ -117,18 +117,6 @@ void Ghost::move(float dt) {
 		(moveVector.x) * (speedPerSec * dt),
 		(moveVector.y) * (speedPerSec * dt)
 	});
-}
-
-bool Ghost::isOnCenter() {
-	sf::Vector2f curPosition = ghost.getPosition();
-	sf::Vector2f tileCenter = map.gridToPos(map.posToGrid(curPosition));
-	sf::Vector2f delta = { 4.f, 4.f };
-	
-	sf::Vector2f distance = curPosition - tileCenter;
-
-	return 
-		std::abs(distance.x) <= delta.x &&
-		std::abs(distance.y) <= delta.y;
 }
 
 int Ghost::getFreeDirsCount() {

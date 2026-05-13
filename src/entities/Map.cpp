@@ -214,6 +214,17 @@ sf::Vector2f Map::gridToPos(sf::Vector2i pos) {
 	return sqrNum;
 }
 
+bool Map::isOnCenter(sf::Vector2f pos) {
+	sf::Vector2f tileCenter = gridToPos(posToGrid(pos));
+	sf::Vector2f delta = { 4.f, 4.f };
+
+	sf::Vector2f distance = pos - tileCenter;
+
+	return
+		std::abs(distance.x) <= delta.x &&
+		std::abs(distance.y) <= delta.y;
+}
+
 bool Map::isInHouse(sf::Vector2i pos) {
 	return pos.y < tilemap.size() &&
 		pos.x < tilemap[0].size() &&
