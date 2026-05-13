@@ -239,7 +239,7 @@ sf::Vector2f Map::gridToPos(sf::Vector2i pos) {
 
 bool Map::isOnCenter(sf::Vector2f pos) {
 	sf::Vector2f tileCenter = gridToPos(posToGrid(pos));
-	sf::Vector2f delta = { 4.f, 4.f };
+	sf::Vector2f delta = { 1.f, 1.f };
 
 	sf::Vector2f distance = pos - tileCenter;
 

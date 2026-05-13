@@ -105,7 +105,28 @@ void Ghost::render(sf::RenderWindow& window) {
 }
 
 void Ghost::returnToHouse() {
-	ghost.setPosition(map.gridToPos(map.getSingleTile(tile::PinkySpawn)));
+	sf::Vector2i spawnTile;
+
+	switch (ghostType) {
+	case GhostType::Blinky:
+		spawnTile = map.getSingleTile(tile::BlinkySpawn);
+		break;
+
+	case GhostType::Pinky:
+		spawnTile = map.getSingleTile(tile::PinkySpawn);
+		break;
+
+	case GhostType::Inky:
+		spawnTile = map.getSingleTile(tile::InkySpawn);
+		break;
+
+	case GhostType::Clyde:
+		spawnTile = map.getSingleTile(tile::ClydeSpawn);
+		break;
+	}
+
+	ghost.setPosition(map.gridToPos(spawnTile));
+
 	unScare();
 	isSleeping = true;
 	sleepClock.restart();
@@ -114,7 +135,9 @@ void Ghost::returnToHouse() {
 void Ghost::wakeUp() {
 	switch (ghostType) {
 		case GhostType::Blinky: {
-			isSleeping = false;
+			if (sleepClock.getElapsedTime().asSeconds() > 2.f) {
+				isSleeping = false;
+			}
 			break;
 		}
 		case GhostType::Pinky: {
@@ -205,6 +228,9 @@ void Ghost::scare() {
 		ghost.setTexture(context.assetsManager.getTexture("fear"));
 		ghostMoveAnimation.applyToSprite(ghost);
 	}
+	if (ghostType == GhostType::Blinky) {
+		context.assetsManager.playLoopedSound("scare");
+	}
 	fearClock.restart();
 }
 
@@ -213,5 +239,6 @@ void Ghost::unScare() {
 		isInFear = false;
 		ghost.setTexture(context.assetsManager.getTexture(mapGhostType(ghostType)));
 		ghostMoveAnimation.applyToSprite(ghost);
+		context.assetsManager.stopLoopedSound("scare");
 	}
 }

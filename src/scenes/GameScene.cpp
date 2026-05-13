@@ -68,17 +68,16 @@ void GameScene::handleEvent(const sf::Event& event) {
 void GameScene::update(float dt) {
 	if (!context.eventQueue.empty()) {
 		GameEvent event = context.eventQueue.front();
+		context.eventQueue.pop();
+
 		if (event.type == EventType::EnergizerCollected) {
 			Log::debug("Energizer pickup event");
-			context.eventQueue.pop();
 			blinky.scare();
 			pinky.scare();
 			inky.scare();
 			clyde.scare();
 		}
 	}
-
-
 
 	if (!isGameOver) {
 		auto collisionGhost = checkGhostCollision();

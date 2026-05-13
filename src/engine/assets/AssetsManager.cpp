@@ -46,7 +46,6 @@ AssetsManager::AssetsManager() {
 	addTexture("gates", "assets/game/maze/gates.png");
 	addTexture("fear", "assets/game/ghosts/fear.png");
 	addTexture("energizer", "assets/game/energizer.png");
-
 	addTexture("border", "assets/game/maze/border.png");
 	addTexture("void", "assets/game/maze/void.png");
 	addTexture("maze", "assets/game/maze/maze.png");
@@ -59,8 +58,11 @@ AssetsManager::AssetsManager() {
 	addTexture("pacmanDie", "assets/game/pacmanDie.png");
 	addTexture("icon", "assets/game/icon.png");
 	addTexture("tilemap", "assets/game/tileMap2.png");
+
 	addSound("start", "assets/sounds/startSound.mp3");
 	addSound("pickup", "assets/sounds/pickup.mp3");
+	addSound("scare", "assets/sounds/scare.mp3");
+
 
 
 	calcTilemap();
@@ -93,7 +95,33 @@ void AssetsManager::playSound(const std::string& soundName) {
 
 	Log::debug("Sound " + soundName + " is played");
 }
- 
+
+void AssetsManager::playLoopedSound(const std::string& soundName) {
+	if (!sounds.count(soundName)) {
+		Log::error("Unknown sound: " + soundName);
+		return;
+	}
+
+	auto& sound = loopedSounds[soundName];
+
+	sound.setBuffer(sounds[soundName]);
+	sound.setLoop(true);
+	sound.setVolume(20.f);
+	sound.play();
+
+	Log::debug("Looped sound " + soundName + " started");
+}
+
+void AssetsManager::stopLoopedSound(const std::string& soundName) {
+	if (!loopedSounds.count(soundName))
+		return;
+
+	loopedSounds[soundName].stop();
+	loopedSounds.erase(soundName);
+
+	Log::debug("Looped sound " + soundName + " stopped");
+}
+
 void AssetsManager::cleanupSounds() {
 	for (auto it = activeSounds.begin(); it != activeSounds.end(); ) {
 		if (it->getStatus() == sf::Sound::Stopped) {

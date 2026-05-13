@@ -2,6 +2,7 @@
 #include <map>
 #include <string>
 #include <list>
+#include <unordered_map>
 #include "SFML/Graphics.hpp"
 #include "SFML/Audio.hpp"
 
@@ -28,6 +29,7 @@ private:
 	std::vector<std::vector<int>> tilemap;
 
 	std::list<sf::Sound> activeSounds;
+	std::unordered_map<std::string, sf::Sound> loopedSounds;
 
 	void addFont(std::string name, std::string path);
 	void addTexture(std::string name, std::string path);
@@ -41,7 +43,9 @@ public:
 	const sf::Texture& getTexture(const std::string& texture);
 
 	void playSound(const std::string& sound);
-	void AssetsManager::cleanupSounds();
+	void playLoopedSound(const std::string& soundName);
+	void stopLoopedSound(const std::string& soundName);
+	void cleanupSounds();
 
 	std::vector<std::vector<int>>& getTilemap();
 	void logTilemap();
