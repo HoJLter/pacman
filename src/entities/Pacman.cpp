@@ -2,7 +2,7 @@
 #include "utils/Log.h"
 
 
-Pacman::Pacman(GameContext& context,IMap& map, sf::Vector2u initPos, float scale) :
+Pacman::Pacman(GameContext& context,IMap& map, sf::Vector2i initPos, float scale) :
 	context(context),
 	scale(scale),
 	map(map),
@@ -87,11 +87,11 @@ void Pacman::update(sf::RenderWindow& window, float dt) {
 	sf::Vector2f p3 = { newPosition.x - size / 2.f + inset, newPosition.y + size / 2.f - inset };
 	sf::Vector2f p4 = { newPosition.x + size / 2.f - inset, newPosition.y + size / 2.f - inset };
 
-	sf::Vector2u t1 = map.posToGrid(p1);
-	sf::Vector2u t2 = map.posToGrid(p2);
-	sf::Vector2u t3 = map.posToGrid(p3);
-	sf::Vector2u t4 = map.posToGrid(p4);
-	sf::Vector2u center = map.posToGrid(newPosition);
+	sf::Vector2i t1 = map.posToGrid(p1);
+	sf::Vector2i t2 = map.posToGrid(p2);
+	sf::Vector2i t3 = map.posToGrid(p3);
+	sf::Vector2i t4 = map.posToGrid(p4);
+	sf::Vector2i center = map.posToGrid(newPosition);
 
 
 	if (map.isFree(t1) && map.isFree(t2) && map.isFree(t3) && map.isFree(t4)) {
@@ -105,11 +105,11 @@ void Pacman::update(sf::RenderWindow& window, float dt) {
 	};
 
 	if (map.isTeleport(center)) {
-		sf::Vector2u leftTpPos = { 0, 9 };
-		sf::Vector2u rightTpPos = { 32, 9 };
+		sf::Vector2i leftTpPos = { 0, 9 };
+		sf::Vector2i rightTpPos = { 32, 9 };
 
-		sf::Vector2u leftTpTarget = { 31, 9 };
-		sf::Vector2u rightTpTarget = { 1, 9 };
+		sf::Vector2i leftTpTarget = { 31, 9 };
+		sf::Vector2i rightTpTarget = { 1, 9 };
 
 		if (center.x == leftTpPos.x &&
 			center.y == leftTpPos.y) {
@@ -132,6 +132,6 @@ void Pacman::render(sf::RenderWindow& window) {
 	window.draw(pacman);
 }
 
-sf::Vector2u Pacman::getCurPos() {
+sf::Vector2i Pacman::getCurPos() {
 	return map.posToGrid(pacman.getPosition());
 }

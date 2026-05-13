@@ -8,8 +8,8 @@ Map::Map(GameContext& context, float scale) :
 {
 	tilemap = context.assetsManager.getTilemap();
 	tilemapSize = {
-		static_cast<unsigned>(tilemap[0].size()),
-		static_cast<unsigned>(tilemap.size())
+		static_cast<int>(tilemap[0].size()),
+		static_cast<int>(tilemap.size())
 	};
 
 	mapOffset = calcOffset();
@@ -194,16 +194,16 @@ sf::Vector2f Map::calcOffset() {
 }
 
 
-sf::Vector2u Map::posToGrid(sf::Vector2f pos) {
-	sf::Vector2u sqrNum = {
-		static_cast<unsigned>(((pos.x - mapOffset.x)) / (TS * scale)),
-		static_cast<unsigned>(((pos.y - mapOffset.y)) / (TS * scale))
+sf::Vector2i Map::posToGrid(sf::Vector2f pos) {
+	sf::Vector2i sqrNum = {
+		static_cast<int>(((pos.x - mapOffset.x)) / (TS * scale)),
+		static_cast<int>(((pos.y - mapOffset.y)) / (TS * scale))
 	};
 
 	return sqrNum;
 }
 
-sf::Vector2f Map::gridToPos(sf::Vector2u pos) {
+sf::Vector2f Map::gridToPos(sf::Vector2i pos) {
 	sf::View view = context.window.getView();
 
 	sf::Vector2f sqrNum = {
@@ -215,15 +215,15 @@ sf::Vector2f Map::gridToPos(sf::Vector2u pos) {
 }
 
 
-bool Map::isFree(sf::Vector2u pos) {
+bool Map::isFree(sf::Vector2i pos) {
 	return pos.y < tilemap.size() &&
 		pos.x < tilemap[0].size() &&
 		tilemap[pos.y][pos.x] != tile::Wall &&
 		tilemap[pos.y][pos.x] != tile::Border;
 };
 
-bool Map::isFreeDirection(sf::Vector2u pos, MoveDirection dir) {
-	sf::Vector2u checkingPos;
+bool Map::isFreeDirection(sf::Vector2i pos, MoveDirection dir) {
+	sf::Vector2i checkingPos;
 	switch (dir) {
 	case MoveDirection::Up: {
 		checkingPos = { pos.x, pos.y - 1 };
@@ -245,26 +245,26 @@ bool Map::isFreeDirection(sf::Vector2u pos, MoveDirection dir) {
 	return isFree(checkingPos);
 }
 
-bool Map::isMoney(sf::Vector2u pos) {
+bool Map::isMoney(sf::Vector2i pos) {
 	return pos.y < tilemap.size() &&
 		pos.x < tilemap[0].size() &&
 		tilemap[pos.y][pos.x] == tile::Money;
 };
 
-bool Map::isTeleport(sf::Vector2u pos) {
+bool Map::isTeleport(sf::Vector2i pos) {
 	return pos.y < tilemap.size() &&
 		pos.x < tilemap[0].size() &&
 		tilemap[pos.y][pos.x] == tile::Teleport;
 };
 
 
-sf::Vector2u Map::getSingleTile(tile spawnTile) {
+sf::Vector2i Map::getSingleTile(tile spawnTile) {
 	for (int y = 0; y < tilemapSize.y; y++) {
 		for (int x = 0; x < tilemapSize.x; x++) {
 			if (tilemap[y][x] == spawnTile) {
 				return {
-					static_cast<unsigned>(x), 
-					static_cast<unsigned>(y)
+					static_cast<int>(x), 
+					static_cast<int>(y)
 				};
 			}
 		}

@@ -38,7 +38,10 @@ GameScene::GameScene(GameContext& context, ISceneSwitcher& ss) :
 	)
 
 {
-	sf::Vector2u winSize = context.window.getSize();
+	sf::Vector2i winSize = {
+		static_cast<int>(context.window.getSize().x),
+		static_cast<int>(context.window.getSize().y)
+	};
 	context.assetsManager.playSound("start");
 	Log::debug(std::to_string(context.settings.viewWidth));
 }
@@ -73,7 +76,7 @@ void GameScene::update(float dt) {
 		map.update(context.window, dt);
 		score.setString("Score " + std::to_string(context.data.score));
 
-		sf::Vector2u pacmanPos = pacman.getCurPos();
+		sf::Vector2i pacmanPos = pacman.getCurPos();
 		MoveDirection pacmanDir = pacman.getCurDir();
 		blinky.update(context.window, pacmanPos, pacmanDir, {}, dt);
 		pinky.update(context.window, pacmanPos, pacmanDir, {}, dt);

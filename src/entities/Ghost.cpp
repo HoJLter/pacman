@@ -5,7 +5,7 @@
 #include <cmath>
 
 
-Ghost::Ghost(GameContext& context, IMap& map, GhostType type, sf::Vector2u initPos, float scale):
+Ghost::Ghost(GameContext& context, IMap& map, GhostType type, sf::Vector2i initPos, float scale):
 	context(context),
 	map(map),
 	ghostType(type),
@@ -36,9 +36,9 @@ void Ghost::handleEvent(const sf::Event& event) {
 }
 
 void Ghost::update(sf::RenderWindow& window, 
-	sf::Vector2u pacmanPos, 
+	sf::Vector2i pacmanPos, 
 	MoveDirection pacmanDir, 
-	sf::Vector2u blinkyPos, 
+	sf::Vector2i blinkyPos, 
 	float dt) 
 {
 	if (curMode == Mode::Scatter &&
@@ -54,7 +54,7 @@ void Ghost::update(sf::RenderWindow& window,
 		Log::debug("CurMode = Scatter");
 	}
 
-	sf::Vector2u target = updateTarget(pacmanPos, blinkyPos, pacmanDir);
+	sf::Vector2i target = updateTarget(pacmanPos, blinkyPos, pacmanDir);
 	int freeDirs= getFreeDirsCount();
 	if (isOnCenter()) {
 		MoveDirection nextDirection = chooseNextDirection(target);
@@ -98,7 +98,7 @@ bool Ghost::isOnCenter() {
 }
 
 int Ghost::getFreeDirsCount() {
-	sf::Vector2u curPosition = map.posToGrid(ghost.getPosition());
+	sf::Vector2i curPosition = map.posToGrid(ghost.getPosition());
 	std::vector<MoveDirection> dirs = {
 		MoveDirection::Up, MoveDirection::Left,
 		MoveDirection::Down, MoveDirection::Right
@@ -111,8 +111,8 @@ int Ghost::getFreeDirsCount() {
 	return result;
 }
 
-MoveDirection Ghost::chooseNextDirection(sf::Vector2u target) {
-	sf::Vector2u curPosition = map.posToGrid(ghost.getPosition());
+MoveDirection Ghost::chooseNextDirection(sf::Vector2i target) {
+	sf::Vector2i curPosition = map.posToGrid(ghost.getPosition());
 	
 	std::vector<MoveDirection> dirs = { 
 		MoveDirection::Up, MoveDirection::Left,
@@ -124,7 +124,7 @@ MoveDirection Ghost::chooseNextDirection(sf::Vector2u target) {
 
 	for (auto dir : dirs) {
 		sf::Vector2i dirVector = dirToVector(dir);
-		sf::Vector2u nextTile = {
+		sf::Vector2i nextTile = {
 			curPosition.x + dirVector.x,
 			curPosition.y + dirVector.y
 		};

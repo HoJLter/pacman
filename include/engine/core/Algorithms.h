@@ -3,4 +3,4 @@
 #include "SFML/Graphics.hpp"
 
 
-float calcDistance(sf::Vector2u pos1, sf::Vector2u pos2);
+float calcDistance(sf::Vector2i pos1, sf::Vector2i pos2);

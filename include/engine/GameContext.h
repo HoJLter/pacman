@@ -11,7 +11,7 @@ enum class EventType {
 
 struct GameEvent {
 	EventType type;
-	sf::Vector2u tilePos;
+	sf::Vector2i tilePos;
 };
 
 struct GameData {

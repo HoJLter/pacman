@@ -33,24 +33,24 @@ private:
 	sf::Clock freezeClock;
 	sf::Clock logClock;
 
-	sf::Vector2u updateTarget(sf::Vector2u pacmanPos, sf::Vector2u blinkyPos, MoveDirection pacmanDir);
-	sf::Vector2u calcBlinkyTarget(sf::Vector2u pacmanPos, MoveDirection pacmanDir);
-	sf::Vector2u calcPinkyTarget(sf::Vector2u pacmanPos, MoveDirection pacmanDir);
-	sf::Vector2u calcInkyTarget(sf::Vector2u pacmanPos, sf::Vector2u blinkyPos, MoveDirection pacmanDir);
-	sf::Vector2u calcClydeTarget(sf::Vector2u pacmanPos, MoveDirection pacmanDir);
+	sf::Vector2i updateTarget(sf::Vector2i pacmanPos, sf::Vector2i blinkyPos, MoveDirection pacmanDir);
+	sf::Vector2i calcBlinkyTarget(sf::Vector2i pacmanPos, MoveDirection pacmanDir);
+	sf::Vector2i calcPinkyTarget(sf::Vector2i pacmanPos, MoveDirection pacmanDir);
+	sf::Vector2i calcInkyTarget(sf::Vector2i pacmanPos, sf::Vector2i blinkyPos, MoveDirection pacmanDir);
+	sf::Vector2i calcClydeTarget(sf::Vector2i pacmanPos, MoveDirection pacmanDir);
 
 	MoveDirection curDirection;
-	MoveDirection chooseNextDirection(sf::Vector2u target);
+	MoveDirection chooseNextDirection(sf::Vector2i target);
 	bool isOnCenter();
 	int getFreeDirsCount();
 	void move(float dt);
 public:
-	Ghost::Ghost(GameContext& context, IMap& map, GhostType type, sf::Vector2u initPos, float scale);
+	Ghost::Ghost(GameContext& context, IMap& map, GhostType type, sf::Vector2i initPos, float scale);
 
-	sf::Vector2u getCurPos();
+	sf::Vector2i getCurPos();
 
 	void handleEvent(const sf::Event& event);
-	void update(sf::RenderWindow& window, sf::Vector2u pacmanPos, MoveDirection pacmanDir, sf::Vector2u blinkyPos, float dt);
+	void update(sf::RenderWindow& window, sf::Vector2i pacmanPos, MoveDirection pacmanDir, sf::Vector2i blinkyPos, float dt);
 	void render(sf::RenderWindow& window);
 };
 
